@@ -91,7 +91,7 @@ $app->get('/getsong/{trackid}', function (Request $request, $trackid) use ($app)
         }
     } else {
         if (Core::GetFileName($trackid)) {
-            if ($fname = Core::GetFileName($trackid);){
+            if ($fname = Core::GetFileName($trackid)){
                 $fs = filesize($GLOBALS['conf']['upload_dir'] . $trackid . ".mp3");
             }
         } else {

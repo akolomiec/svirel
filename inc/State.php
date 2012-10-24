@@ -35,7 +35,7 @@ if (defined("AKPLAYER")) {
         }
         static function Getserial($side = 'left', $playlistid = '', $req = '') {
             global $app;
-            $app['monolog']->addDebug(__FUNCTION__.' Посмотрим какой файл поет: ', array('side' => $side, 'playlistid' => $playlistid));
+            $app['monolog']->addDebug(__FUNCTION__.' Посмотрим какой файл поет: ', array('side' => $side, 'playlistid' => $playlistid, 'req' => $req));
             $uid = CUser::GetUserId();
             $base = new DB;
             if (!empty($req) AND $playlistid = 'search'){
