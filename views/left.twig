@@ -1,0 +1,13 @@
+<div class="pl_header"><h1>{{ header }}</h1></div>
+<div class="wrapper-for-drop-menu">
+    <div id="wrapper-list3">
+        <p>Добавить все песни в плейлист</p>
+    </div>
+</div>
+<div id="leftblock" class="left-block-top100 " lbid="{{ category }}">
+{% include 'list.twig' %}
+</div>
+<div class="paginator" id="pageleft"></div>
+<script type="text/javascript">
+    pageleft = new Paginator('pageleft', {{ totalpages }} , 10 , {{ page }} , "{{ web_root }}{{ url }}/", 'left');
+</script>

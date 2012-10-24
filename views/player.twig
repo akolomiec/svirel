@@ -1,0 +1,87 @@
+
+<div id="jquery_jplayer_1" class="jp-jplayer"></div><!--Объект плеера-->
+<div id="fixed-wrapper" class="jp-audio">
+    <div class="min-max-div jp-type-single">
+        <div class="jp-gui jp-interface">
+            <table cellpadding="0" cellspacing="0" border="0" class="wrapper-table">
+                <tr>
+                    <td class="p2"></td>
+                    <td>
+                        <table cellpadding="0" cellspacing="0" border="0" class="wrapper-table">
+                            <tr>
+                                <!--Начало левой колонки контролов плеера-->
+                                <td class="p43" id="left-column-of-pleer">
+                                    <form>
+                                        <table cellpadding="0" cellspacing="0" border="0" class="full-width" id="table-for-search-input">
+                                            <tr>
+                                                {% include 'search.twig' %}
+                                            </tr>
+                                        </table>
+                                    </form>
+                                </td>
+                                <!--Конец левой колонки контролов плеера-->
+                                <td class="p7"></td>
+                                <!--Начало средней колонки контролов плеера-->
+                                <td class="p43" id="td-main-controls">
+                                    <div id="wrapper-for-main-player">
+                                        <div class="jp-type-single">
+                                            <div class="jp-gui jp-interface">
+                                                <div class="jp-controls">
+                                                    <div class="jp-prev"></div>
+                                                    <div class="jp-play"></div>
+                                                    <div class="jp-pause"></div>
+                                                    <div class="jp-next"></div>
+                                                    <div id="wrapper-name-song-and-artist">
+                                                        <p><span class="jp-name-artist">Сергей Галанин и Андрей Макаревич — Ничего Нет
+                Сергей Галанин и Андрей Макаревич Сергей Галанин и Андрей Макаревич — Ничего Нет </span>  — <span class="jp-name-song">Complicated</span></p>
+                                                    </div>
+                                                    <div class="jp-current-time">9:27</div>
+                                                    <div class="jp-progress">
+                                                        <div class="border-radius-bottom-left"></div>
+                                                        <div class="border-radius-bottom-right"></div>
+                                                        <div class="border-radius-top-left"></div>
+                                                        <div class="border-radius-top-right"></div>
+                                                        <div class="jp-seek-bar">
+                                                            <div class="jp-play-bar"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-small btn-under-progress" id="download-btn-small">Скачать</div>
+                                    <div class="btn-small btn-under-progress" id="favourite-btn-small">В плейлист</div>
+                                </td>
+                                <!--Конец средней колонки контролов плеера-->
+                                <td class="p7"></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <!--Начало контролов для правой панели-->
+                    <td class="px216">
+                        <div id="wrapper-for-sound-progress">
+                            <div class="jp-mute"></div>
+                            <div class="jp-unmute"></div>
+                            <div class="jp-volume-bar">
+                                <div class="border-radius-bottom-left"></div>
+                                <div class="border-radius-bottom-right"></div>
+                                <div class="border-radius-top-left"></div>
+                                <div class="border-radius-top-right"></div>
+                                <div class="jp-volume-bar-value"></div>
+                            </div>
+                            <div class="jp-repeat"></div>
+                            <div class="jp-repeat-off"></div>
+                            <div class="jp-shuffle"></div>
+                            <div class="jp-shuffle-off"></div>
+                            <div class="scan"></div>
+                            <div class="scan-off"></div>
+                        </div>
+                    </td>
+                    <!--Конец контролов для правой панели-->
+                    <td class="p2"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="shadow-under-pleer"></div>
+</div>

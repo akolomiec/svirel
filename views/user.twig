@@ -1,0 +1,12 @@
+    <p class="header-right-block">{{ username }}</p>
+    <p class="my-playlist" id="default"><span>Мой плейлист</span></p>
+    <p class="my-playlist"><span>Недавно проигрываемые</span></p>
+    {% for item in list %}
+    <p class="my-playlist" id="{{ item.id }}"><span>{{ item.name }}</span></p>
+    {% endfor %}
+
+
+    <div class="btn-small" id="btn-new-playlist">Новый плейлист</div>
+    <div class="btn-small" id="btn-del-playlist">Удалить текущий</div>
+    <br>
+    <div class="btn btn-registration" id="go-out">Выйти <img src="images/controls-light/go-out.png"></div>

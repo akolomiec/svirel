@@ -1,0 +1,22 @@
+
+    {% for track in list %}
+    <div class="track{% if trackselect == track.serial %} track-selected {% endif %}" track-id="{{ track.owner_id|e }}_{{ track.aid|e }}" serial="{{ track.serial|e }}"><!--В диве композиция-->
+        <a href ="/getsong/{{ track.owner_id|e }}_{{ track.aid|e }}" title="Скачать {{ track.artist|e }} - {{ track.title|e }} бесплатно" class="save-sign"></a>
+        <div class="add-in-playlist-sign"></div>
+        <div class="border-radius-top-left"></div>
+        <div class="border-radius-top-right"></div>
+        <div class="border-radius-bottom-left"></div>
+        <div class="border-radius-bottom-right"></div>
+        <div class="wrapper-song-and-artist">
+            <div class="track_artist">{{ track.artist|e }}</div>
+            <p class="line-between-track">—</p>
+            <div class="track_name">{{ track.title|e }}</div>
+        </div>
+        <div class="track_album"><p>{{ track.artist|e }}</p></div>
+        <div class="track_duration">{{ track.duration }}</div>
+    </div>
+    {% else %}
+
+    <div> В плейлисте нет ни одной композиции</div>
+
+    {% endfor %}

@@ -1,0 +1,670 @@
+<script language="javascript" type="text/javascript">
+/**
+ * Created by JetBrains PhpStorm.
+ * User: a.kolomiec
+ * Date: 23.12.11
+ * Time: 15:21
+ * To change this template use File | Settings | File Templates.
+ */
+
+
+$(document).ready(function(){
+    init_jplayer();
+    drawleft();
+    drawcenter();
+    drawright();
+    drawlsearch();
+
+});
+
+function init_jplayer () {
+    $("#jquery_jplayer_1").jPlayer({
+        ready: function () {
+            $(this).jPlayer("setMedia", {
+                mp3: ""
+            });
+            init();
+        },
+        swfPath: "/js",
+        errorAlerts: false,
+        cssSelectorAncestor: "#fixed-wrapper",
+        cssSelector: {
+            videoPlay: ".jp-video-play",
+            play: ".jp-play",
+            pause: ".jp-pause",
+            stop: ".jp-stop",
+            seekBar: ".jp-seek-bar",
+            playBar: ".jp-play-bar",
+            mute: ".jp-mute",
+            unmute: ".jp-unmute",
+            volumeBar: ".jp-volume-bar",
+            volumeBarValue: ".jp-volume-bar-value",
+            volumeMax: ".jp-volume-max",
+            currentTime: ".jp-current-time",
+            duration: ".jp-duration",
+            fullScreen: ".jp-full-screen",
+            restoreScreen: ".jp-restore-screen",
+            repeat: ".jp-repeat",
+            repeatOff: ".jp-repeat-off",
+            gui: ".jp-gui",
+            noSolution: ".jp-no-solution"
+        },
+        supplied: "mp3, wma",
+        ended: function () {
+            $.stickr({note:'Песня закончилась',className:'opacity',position:{right:0,top:0}});
+            $(".jp-seek-bar").css("width","0%");
+
+            var pltrack="";
+            var plnow = $(".track-selected + .track");
+            var track = $(".track-selected + .track").attr("track-id");
+            var par = $(".track-selected.track").parent();
+            var side = getside(par);
+            if (side == 'left'){
+                var cur_page = pageleft.inputData.pageCurrent;
+                var url = pageleft.inputData.baseUrl;
+                var page_total = pageleft.inputData.pagesTotal;
+            } else {
+                var cur_page = pagecenter.inputData.pageCurrent;
+                var url = pagecenter.inputData.baseUrl;
+                var page_total = pagecenter.inputData.pagesTotal;
+            }
+
+
+            //todo если есть плайлист то надо допилить для перехода по страничкам плейлиста.
+            var page;
+            if (typeof track == "undefined") { // Если это последняя композиция в списке.
+                if (page_total > cur_page) {
+                    page = (cur_page - 0) + 1;
+                    getpage(url, page, null, page_total,side);
+                } else {
+                    if ($(".jp-repeat").css("display") == "none") { // Если включен повтор
+                        getpage(url, 1, null, page_total, side);
+                    }
+                }
+            } else {
+                playsong(plnow);
+            }
+        }
+    });
+}
+
+function getside (par) {
+    if ($(par).hasClass("left-block-top100")){
+        return 'left';
+    } else {
+        if ($(par).hasClass("pl")) {
+            return 'right';
+        }
+    }
+
+}
+
+function init () {
+
+    $('.track').unbind('click');
+    $('.track').bind('click',function () {
+        playsong($(this));
+        SaveState($(this));
+        $.stickr({note:'Play выполнен',className:'opacity',position:{right:0,top:0}});
+    });
+
+    $('.jp-prev').unbind('click');
+    $('.jp-prev').bind('click', function () {
+
+        var plnow = $(".track-selected").prev(".track");
+        var track = $(plnow).attr("track-id");
+        var par = $(".track-selected").parent();
+        var side = getside(par);
+        if (side == 'left'){
+            var cur_page = pageleft.inputData.pageCurrent;
+            var url = pageleft.inputData.baseUrl;
+            var page_total = pageleft.inputData.pagesTotal;
+        } else {
+            var cur_page = pagecenter.inputData.pageCurrent;
+            var url = pagecenter.inputData.baseUrl;
+            var page_total = pagecenter.inputData.pagesTotal;
+        }
+        if (typeof track == "undefined") {
+            $.stickr({note:'Предыдущий трек не найден',className:'opacity',position:{right:0,top:0}});
+            if (cur_page == 1){
+                $.stickr({note:'Текущая страница первая',className:'opacity',position:{right:0,top:0}});
+                plnow = $(".track-selected");
+                playsong(plnow);
+            } else {
+                getpage(url, (cur_page - 1),"last", page_total, side);
+                $.stickr({note:'Сменили страницу на '+(cur_page-1),className:'opacity',position:{right:0,top:0}});
+            }
+        }else {
+            playsong(plnow);
+        }
+        $.stickr({note:'jp-prev выполнен',className:'opacity',position:{right:0,top:0}});
+    });
+
+    $('.jp-next').unbind('click');
+    $('.jp-next').bind ('click',function () {
+        var plnow = $(".track-selected").next(".track");
+        var track = $(plnow).attr("track-id");
+        var par = $(".track-selected").parent();
+        var side = getside(par);
+        if (side == 'left'){
+            var cur_page = pageleft.inputData.pageCurrent;
+            var url = pageleft.inputData.baseUrl;
+            var page_total = pageleft.inputData.pagesTotal;
+        } else {
+            var cur_page = pagecenter.inputData.pageCurrent;
+            var url = pagecenter.inputData.baseUrl;
+            var page_total = pagecenter.inputData.pagesTotal;
+        }
+        if (typeof track == "undefined") {
+            if (page_total > cur_page){
+                var page = (cur_page-0)+1;
+                getpage(url, page, null , page_total, side);
+            } else {
+                if ($(".jp-repeat").css("display") == "none") { // Если включен повтор
+                    getpage(url, 1, null , page_total, side);
+                }
+            }
+        }else {
+            playsong(plnow);
+        }
+        $.stickr({note:'jp-next выполнен',className:'opacity',position:{right:0,top:0}});
+    });
+
+    $('#search-in-vk').unbind('click');
+    $('#search-in-vk').bind('click',function () {
+        search();
+    });
+    $('input#search-input').submit(function (event) {
+        event.preventDefault();
+
+        search();
+
+        return false;
+    });
+    $('h1').gradientText({
+        colors: ['#50AADC', '#640064']
+    });
+    $("#top100").unbind('click');
+    $("#top100").bind('click', function (){
+        drawleft();
+    });
+    $("#go-out").unbind('click');
+    $("#go-out").bind('click', function () {
+        logout();
+    });
+
+    $(".add-in-playlist-sign").unbind('click');
+    $(".add-in-playlist-sign").bind('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        addinplaylist($(this).parent());
+    });
+    $(".delete-sign").unbind('click');
+    $(".delete-sign").bind('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        delfromplaylist($(this).parent());
+    });
+
+    $(".my-playlist").unbind('click');
+    $(".my-playlist").bind('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        drawcenter($(this).attr("id"));
+    });
+
+    $("#btn-new-playlist").unbind('click');
+    $("#btn-new-playlist").bind('click', function (event) {
+        playlistname = prompt("Введите имя нового плейлиста", "Новый плейлист");
+
+        newplaylist(playlistname);
+    });
+
+    $(".save-sign").unbind('click');
+    $(".save-sign").bind('click', function (event) {
+        event.stopPropagation();
+    });
+    $("#div-last-search p").unbind('click');
+    $("#div-last-search p").bind('click', function (event) {
+        event.stopPropagation();
+        $("#search-input").val($(this).text());
+        $.stickr({note:'search = '+$(this).text(),className:'opacity',position:{right:0,top:0}});
+        search();
+
+    });
+    $("#btn-del-playlist").unbind('click');
+    $("#btn-del-playlist").bind('click', function (event) {
+        var playlistid = $(".pl").attr("id");
+        delplaylist(playlistid);
+    });
+
+
+
+    $(".track").draggable({ containment: "#wrapper-table-main", scroll: false, cursor: "move", distance: 30, revert: true });
+    $(".pl_header, .pl").droppable();
+    $(".pl_header, .pl").unbind( 'drop' );
+    $(".pl_header, .pl").bind( 'drop', function(event, ui) {
+        addinplaylist(ui.draggable);
+    });
+    //$.stickr({note:'Init выполнен',className:'opacity',position:{right:0,top:0}});
+
+}
+
+function logout() {
+    $.stickr({note:'разлогиниться',className:'opacity',position:{right:0,top:0}});
+    $.cookie('svireluser', null);
+    $.ajax({
+        url:	 "/logout/",
+
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            $.stickr({note:'logout выполнен',className:'opacity',position:{right:0,top:0}});
+            $("#user").html("");
+            $("#registration").html(response);
+            drawcenter();
+            //return response;
+
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+
+        },
+        complete: function (response) {
+
+            init();
+
+
+        }
+
+    });
+
+}
+
+
+function search() {
+
+    q = $('input[name="search-input"]').val();
+    if (q == '' || (q.length<=3)) {
+        $.stickr({note:'Запрос пустой',className:'opacity',position:{right:0,top:0}});
+    }else {
+        drawleft("s", q);
+        drawlsearch();
+        init();
+
+    }
+    $.stickr({note:'Search выполнен запрос'+q,className:'opacity',position:{right:0,top:0}});
+}
+
+function playsong (track) {
+    $(".jp-seek-bar").css("width","0%");
+    $('.track-selected').removeClass('track-selected');
+    $(track).addClass('track-selected');
+
+    var trackid = $(track).attr('track-id');
+    //alert ( "TrackId="+trackid);
+    // pltrack = encodeURI(pltrack);
+    var artist = $(track).find(".track_artist").text();
+    var trak= $(track).find(".track_name").text();
+    $(".jp-name-artist").text(artist);
+    $(".jp-name-song").text(trak);
+    $.stickr({note:'Ищу файл '+artist+'-'+trak+' '+trackid,className:'opacity',position:{right:0,top:0}});
+    $("#jquery_jplayer_1").jPlayer("setMedia", {
+        mp3: "/media/"+trackid
+    }).jPlayer("play");
+    $.stickr({note:'Playsong выполнен',className:'opacity',position:{right:0,top:0}});
+
+
+}
+//todo Сделать с учетом левой и средней колонок
+function changepage(url ,page, totalpages, side) {
+
+    $.stickr({note:'Запрос '+url,className:'opacity',position:{right:0,top:0}});
+    $.ajax({
+        url:	 url+page,
+        type:	 'GET', //что-нибудь получим
+
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            if ((code==200) || (response != "") ){
+                $.stickr({note:'changepage выполнен'+url+page,className:'opacity',position:{right:0,top:0}});
+                if (side == 'left') {
+                    $(".left-block-top100").html(response);
+                    delete pageleft; pageleft = new Paginator('pageleft', totalpages, 10, page, url, 'left');
+                } else {
+                    if (side == 'right') {
+                        $(".pl").html(response);
+                        delete pagecenter; pagecenter = new Paginator('pagecenter', totalpages, 10, page, url, 'right');
+                    }
+                }
+
+
+                //return response;
+
+            }else{
+                $.stickr({note:'Сервер вернул какой-то непонятный код ответа: ' + code,className:'opacity',position:{right:0,top:0}});
+            }
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+
+        },
+        complete: function (response) {
+
+            init();
+
+
+        }
+    });
+    return false;
+
+}
+
+function getpage(url ,page, num ,totalpages, side) {
+    num = num == null;
+    $.stickr({note:'Запрос '+url+ page,className:'opacity',position:{right:0,top:0}});
+    $.ajax({
+        url:	 url+page,
+        type:	 'GET', //что-нибудь получим
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            if ((code==200) || (response != "") ){
+                var par;
+                if (side == 'left'){
+                    par = $(".left-block-top100");
+                } else {
+                    par = $(".pl");
+                }
+                $.stickr({note:'getpage выполнен'+url,className:'opacity',position:{right:0,top:0}});
+                if (num) {
+                    plnow = $(par).html(response).find(".track:first");
+                } else {
+                    plnow = $(par).html(response).find(".track:last");
+                }
+                if (side == 'left'){
+                    delete pageleft; pageleft = new Paginator('pageleft', totalpages, 10, page, url, 'left');
+                } else {
+                    delete pagecenter; pagecenter = new Paginator('pagecenter', totalpages, 10, page, url, 'right');
+                }
+
+                if (typeof plnow != "undefined"){
+                    playsong(plnow);
+                }
+                //return response;
+
+            }else{
+                $.stickr({note:'Сервер вернул какой-то непонятный код ответа: ' + code,className:'opacity',position:{right:0,top:0}});
+            }
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+
+        },
+        complete: function () {
+            init();
+
+        }
+    });
+
+}
+
+function Checkuser(responce) {
+    req = $.parseJSON(responce);
+
+    if ( isNaN(req.id) ) {
+        if ( req.code == 1 ) $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
+        if ( req.code == 2 ) $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
+        if ( req.code == 3 ) $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
+    } else {
+        return true;
+    }
+
+
+}
+
+function regauth () {
+
+    login = $('input[name="login"]').val();
+    pass  = $('input[name="password"]').val();
+    $.stickr({note:'Топаем регистрироваться или логиниться: login: '+login+' Pass: '+ pass,className:'opacity',position:{right:0,top:0}});
+    $.ajax({
+        url:	 "/reg/",
+        type:	 'POST', //что-нибудь получим
+
+        data: { login: login, pass: pass },
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            $.stickr({note:'regauthcode = '+code+' выполнен'+response,className:'opacity',position:{right:0,top:0}});
+
+            if (Checkuser(response)) {
+                $.stickr({note:'Пользователь вошел или зарегистрировался? '+req.id,className:'opacity',position:{right:0,top:0}});
+                $.cookie('svireluser', req.id,  { expires: 7, path: '/', domain: '.akmain.org' });
+                $("#registration").html("");
+                drawright();
+                drawcenter();
+            }
+
+            //return response;
+
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+
+        },
+        complete: function (response) {
+
+            init();
+
+
+        }
+
+    });
+
+}
+
+
+
+/*
+ * Для запроса определенного контента для левой колонки указываем в параметре такие значения
+ * 1: top100
+ * 2: Жанры
+ * 3: Радио
+ * 4: Из vk.com
+ * s: Поиск музыки
+ * req: Строка запроса
+ *
+ * */
+function drawleft(data, req){
+    $.stickr({note:'Загружаем левую колонку',className:'opacity',position:{right:0,top:0}});
+    $.ajax({
+        url:	 "/getleft/",
+        type:	 'POST', //что-нибудь получим
+
+        data: { cont: data , req: req},
+        success: function (response) {
+            $.stickr({note:'Запрос drawleft выполнен',className:'opacity',position:{right:0,top:0}});
+            delete pageleft;
+            $("#left-column").html(response);
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе drawleft: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+
+        },
+        complete: function () {
+            init();
+            drawlsearch();
+
+        }
+
+    });
+}
+
+function drawright(){
+    $.stickr({note:'Загружаем правую колонку',className:'opacity',position:{right:0,top:0}});
+    $.ajax({
+        url:	 "/getregistration/",
+        type:	 'POST', //что-нибудь получим
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            $("#registration").html(response);
+            $.stickr({note:'Запрос drawright выполнен',className:'opacity',position:{right:0,top:0}});
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе drawcenter: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        },
+        complete: function (response) {
+            init();
+        }
+    });
+}
+
+
+function addinplaylist (track) {
+    var trackid = $(track).attr('track-id');
+    var playlistid = $(".pl").attr("id");
+    $.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+    $.ajax({
+        url:	 "/addinplaylist/",
+        type:	 'POST', //что-нибудь получим
+
+        data: { trackid: trackid , playlistid: playlistid },
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            $.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
+
+            drawcenter(playlistid);
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе drawcenter: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        },
+        complete: function () {
+            init();
+        }
+
+    });
+}
+
+function delfromplaylist (track) {
+    var playlistid = $(".pl").attr('id');
+    var serial = $(track).attr("serial");
+    $.stickr({note:'Удалить трек serial='+serial+' из плейлиста с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+    $.ajax({
+        url:	 "/delfromplaylist/",
+        type:	 'POST', //что-нибудь получим
+        data: { serial: serial , playlistid: playlistid },
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            $.stickr({note:'Запрос delfromplaylist выполнен',className:'opacity',position:{right:0,top:0}});
+            $("#center-column").html(response);
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе delfromplaylist: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        },
+        complete: function () {
+            init();
+        }
+    });
+}
+
+function save_sign (track) {
+    var trackid = $(track).attr('track-id');
+
+}
+
+function newplaylist(playlistname) {
+    $.ajax({
+        url:	 "/newplaylist/",
+        type:	 'POST', //что-нибудь получим
+        data: { playlistname: playlistname },
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            $.stickr({note:'Запрос drawlsearch выполнен',className:'opacity',position:{right:0,top:0}});
+            drawright();
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе drawlsearch: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        },
+        complete: function () {
+            init();
+        }
+    });
+}
+function delplaylist(playlistid) {
+    $.ajax({
+        url:	 "/delplaylist/",
+        type:	 'POST', //что-нибудь получим
+        data: { playlistid: playlistid },
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            $.stickr({note:'Запрос delete play list выполнен',className:'opacity',position:{right:0,top:0}});
+            result = $.parseJSON(response);
+            if (result.code == 0) {
+                $.stickr({note:'code = 0',className:'opacity',position:{right:0,top:0}});
+                drawcenter();
+                drawright();
+            } else {
+                $.stickr({note:'code = 1',className:'opacity',position:{right:0,top:0}});
+            }
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе drawlsearch: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        },
+        complete: function () {
+            init();
+        }
+    });
+}
+function drawcenter(playlist, page){
+    $.stickr({note:'Загружаем центральную колонку',className:'opacity',position:{right:0,top:0}});
+    if (typeof playlist == "undefined") {
+        playlist = "default";
+    }
+    if (typeof page == "undefined") {
+        page = 0;
+    }
+    $.ajax({
+        url:	 "/getcenter/"+playlist+"/"+page,
+        type:	 'GET', //что-нибудь получим
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            $.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
+            $("#center-column").html(response);
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе drawcenter: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        },
+        complete: function () {
+            init();
+        }
+    });
+}
+
+
+function drawlsearch () {
+    $.ajax({
+        url:	 "/showlastsearch/",
+        type:	 'GET', //что-нибудь получим
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            $.stickr({note:'Запрос drawlsearch выполнен',className:'opacity',position:{right:0,top:0}});
+            $("#div-last-search").html(response);
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе drawlsearch: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        },
+        complete: function () {
+            init();
+        }
+    });
+}
+
+function SaveState(track){
+    var par = $(track).parent();
+    var side = getside(par);
+
+    $.ajax({
+        url:	 "/newplaylist/",
+        type:	 'POST', //что-нибудь получим
+        data: { side: side },
+        success: function(response, code){ //да, мы пропустили последний параметр — он нам не нужен
+            $.stickr({note:'Состояние сохранено',className:'opacity',position:{right:0,top:0}});
+
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе SaveState: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        },
+        complete: function () {
+            init();
+        }
+    });
+}
+
+</script>

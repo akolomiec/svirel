@@ -1,0 +1,11 @@
+
+    <p class="header-right-block">Зарегистрируйтесь или войдите</p>
+    <p class="help-in-right-block">Введите логин, пароль и ваши созданные плейлисты сохранятся. Вы сможете послушать музыку с другого компьютера. А ещё можно будет загружать и слушать свои композиции.</p>
+    <form method="POST" onsubmit="regauth();" action="">
+    <p class="login-in-right-block">Логин<span id="login-error"> (Латинские буквы, цифры, –, _)</span></p>
+    <input class="input-in-right-block" name="login" type="text" onkeydown="if(event.keyCode==13){ regauth(); return false;}">
+    <p class="login-in-right-block">Пароль<span id="pass-error"> (Латинские буквы, цифры, –, _)</span></p>
+    <input class="input-in-right-block" name="password" type="password" onkeydown="if(event.keyCode==13){ regauth(); return false;}">
+    <div class="btn btn-registration" onclick="regauth();">Зарегистрироваться / Войти</div>
+    <div id="btn-register-vk"></div>
+    </form>

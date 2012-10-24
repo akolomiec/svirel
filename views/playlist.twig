@@ -1,0 +1,30 @@
+<div class="pl_header"><h1>{{ playlistheader }}</h1></div>
+<div class="wrapper-for-drop-menu">
+    <div id="wrapper-list1">
+        <div id="wrapper-drop-menu1">
+            <p>Переименовать</p>
+            <p>Удалить</p>
+            <p>Получить ссылку</p>
+        </div>
+        <p>Опции плейлиста</p>
+    </div>
+    <div id="wrapper-list2">
+        <div id="wrapper-drop-menu2">
+            <p>По заголовку</p>
+            <p>По длительности</p>
+            <p>По исполнителю</p>
+        </div>
+        <p>Отсортировать</p>
+    </div>
+</div>
+<div id="{{ playlistid }}" class="pl">
+
+    {% include 'plist.twig' %}
+
+</div>
+
+<div class="paginator" id="pagecenter"></div>
+<script type="text/javascript">
+    pagecenter = new Paginator('pagecenter', {{ totalpages }} , 10 , {{ page }} , "{{ web_root }}{{ url }}/", 'right');
+</script>
+
