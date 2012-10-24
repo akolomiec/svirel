@@ -1,0 +1,368 @@
+
+/*1. Начало основных стили для body*/
+body{
+	color:rgb(35, 35, 35);
+	background-color:rgb(248, 248, 248);
+}
+.border-radius-top-left{
+	background-image:url(../images/controls-light/border-radius-top-left.png);
+}
+.border-radius-top-right{
+	background-image:url(../images/controls-light/border-radius-top-right.png);
+}
+.border-radius-bottom-left{
+	background-image:url(../images/controls-light/border-radius-bottom-left.png);
+}
+.border-radius-bottom-right{
+	background-image:url(../images/controls-light/border-radius-bottom-right.png);
+}
+#wrapper-general-for-content{
+	background-color:white;
+}
+/*Конец основных стили для body*/
+
+
+
+
+
+
+/*2. Начало стиля кнопки*/
+.btn{
+	background-image:url(../images/controls-light/left-btn.png), url(../images/controls-light/right-btn.png), url(../images/controls-light/center-btn.png);
+	}
+.btn:hover{
+	background-image:url(../images/controls-light/left-btn.png), url(../images/controls-light/right-btn.png), url(../images/controls-light/center-btn.png);
+	}
+.btn:active{
+	background-image:url(../images/controls-light/left-btn.png), url(../images/controls-light/right-btn.png), url(../images/controls-light/center-btn.png);
+}
+/*Конец стиля кнопки*/
+
+
+
+
+
+
+/*3. Начало стиля маленькой кнопки*/
+.btn-small{
+	background-image:url(../images/controls-light/left-small-btn.png), url(../images/controls-light/right-small-btn.png), url(../images/controls-light/center-small-btn.png);
+	}
+.btn-small:hover{
+	background-image:url(../images/controls-light/left-small-btn.png), url(../images/controls-light/right-small-btn.png), url(../images/controls-light/center-small-btn.png);
+	}
+.btn-small:active{
+	background-image:url(../images/controls-light/left-small-btn.png), url(../images/controls-light/right-small-btn.png), url(../images/controls-light/center-small-btn.png);
+}
+/*Конец стиля маленькой кнопки*/
+
+
+
+
+/*4. Начало каркаса фиксированного дива с плеером + тень под плеером*/
+#shadow-under-pleer{
+	background-image:url(../images/controls-light/shadow-under-pleer.png);
+}
+.min-max-div{
+	background-color:white;
+}
+/*Конец каркаса фиксированного дива с плеером*/
+
+
+
+
+
+
+
+
+/*5. Начало контролов правого блока плеера*/
+#search-input{
+	background-image:url(../images/controls-light/bg-input-text.gif);
+}
+#search-input:focus{
+	background-image:url(../images/controls-light/bg-input-text-focus.png);
+}
+input[type=text]:focus{
+	background-image:url(../images/controls-light/bg-input-text-focus.png);
+}
+/*Конец контролов правого блока плеера*/
+
+
+
+/*6. Начало средней колонки контролов плеера*/
+.jp-prev{
+	background-image:url(../images/controls-light/jp-prev.png);
+}
+.jp-next{
+	background-image:url(../images/controls-light/jp-next.png);
+}
+.jp-play{
+	background-image:url(../images/controls-light/jp-play.png);
+}
+.jp-pause{
+	background-image:url(../images/controls-light/jp-pause.png);
+}
+.jp-current-time{
+	background-image:url(../images/controls-light/jp-current-time-bg.png);
+	color:rgb(105, 105, 105);
+}
+.jp-progress{
+	background-image:url(../images/controls-light/bg-jp-progress.png);
+}
+.jp-seek-bar{
+	background-image:url(../images/controls-light/bg-jp-seek-bar.png);
+}
+.jp-play-bar{
+	background-image:url(../images/controls-light/bg-jp-play-bar.png);
+}
+#wrapper-name-song-and-artist{
+	color:rgb(105, 105, 105);
+}
+/*Конец средней колонки контролов плеера*/
+
+
+
+
+/*7. Начало правой колонки контролов плеера*/
+.jp-unmute{
+	background-image:url(../images/controls-light/jp-unmute.png);
+}
+.jp-mute{
+	background-image:url(../images/controls-light/jp-mute.png);
+}
+.jp-volume-bar{
+	background-image:url(../images/controls-light/bg-jp-progress.png);
+}
+.jp-volume-bar-value{
+	background-image:url(../images/controls-light/bg-jp-play-bar.png);
+}
+.jp-repeat{
+	background-image:url(../images/controls-light/jp-repeat.png);
+}
+.jp-repeat-off{
+	background-image:url(../images/controls-light/jp-repeat-off.png);
+}
+.jp-shuffle{
+	background-image:url(../images/controls-light/jp-shuffle.png);
+}
+.jp-shuffle-off{
+	background-image:url(../images/controls-light/jp-shuffle-off.png);
+}
+.scan{
+	background-image:url(../images/controls-light/scan.png);
+}
+.scan-off{
+	background-image:url(../images/controls-light/scan-off.png);
+}
+/* Конец правой колонки контролов плеера*/
+
+
+
+
+
+
+/*9. Начало правого блока основного содержимого*/
+.input-in-right-block{
+	background-image:url(../images/controls-light/bg-input-text.gif);
+	color:rgb(35, 35, 35);
+}
+#btn-register-vk{
+	background-image:url(../images/controls-light/btn-register-vk.png);
+}
+.header-right-block{
+	color:rgb(105, 105, 105);
+}
+.help-in-right-block{
+	color:rgb(150, 150, 150);
+}
+#login-error, #pass-error{
+	color:red;
+}
+/*Конец правого блока основного содержимого*/
+
+
+
+
+
+/*10. Начало правого блока основного содержимого. Об артисте*/
+#name-album-in-right-block span:hover{
+	color:red;
+}
+#album-cover{
+	background-image:url(../images/controls-light/album-cover.jpg);
+}
+#highlight{
+	background-image:url(../images/controls-light/highlight.png);
+}
+.artist-s-best-song>span:hover{
+	border-bottom:1px dashed red;
+	color:red;
+}
+/* Конец правого блока основного содержимого. Об артисте*/
+
+
+
+
+/*11. Начало правого блока основного содержимого. О пользователе*/
+.my-playlist>span, .my-playlist-recommend>span{
+	border-bottom:1px dashed rgb(35, 35, 35);
+}
+.my-playlist:hover, .my-playlist-recommend:hover{
+	background-color:rgb(230, 230, 230);
+}
+.my-playlist:active{
+	background-color:rgb(150, 150, 150);
+}
+.my-playlist>span:hover, .my-playlist-recommend>span:hover{
+	border-bottom:1px dashed red;
+	color:red;
+}
+/* Конец правого блока основного содержимого. О пользователе*/
+
+
+
+/*12. Начало футера*/
+#footer{
+	background-image:url(../images/controls-light/bg-shadow-footer.gif);
+	background-color:rgb(248, 248, 248);
+	color:rgb(105, 105, 105);
+}
+#footer h2{
+	color:rgb(105, 105, 105);
+}
+/*12. Конец футера*/
+
+
+
+
+/*13. Начало категорий ТОП 100, ЖАНРОВ, РАДИО, отступ средней колонки и стили h1*/
+.selected-categories{
+	background: rgb(80,170,220); /* Old browsers */
+	background: -moz-linear-gradient(left,  rgb(80,170,220) 0%, rgb(100,0,100) 85%, rgb(100,0,100) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgb(80,170,220)), color-stop(85%,rgb(100,0,100)), color-stop(100%,rgb(100,0,100))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* IE10+ */
+	background: linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#50aadc', endColorstr='#640064',GradientType=1 ); /* IE6-9 */
+}
+#cetegories p, #cetegories p, #cetegories p{
+	border-bottom:1px dotted rgb(105, 105, 105);
+	color:rgb(105, 105, 105);
+}
+h1{
+	color:rgb(105, 105, 105);
+}
+#cetegories>.selected-categories p{
+	color:white;
+	border-bottom-color:white;
+}
+h1{
+	color:rgb(105, 105, 105);
+}
+/*Конец категорий ТОП 100, ЖАНРОВ, РАДИО, отступ средней колонки и стили h1*/
+
+
+
+
+
+/*14. Начало выпадающее меню и опции плейлистов*/
+#wrapper-list3{
+	border-bottom:1px dotted rgb(35, 35, 35);
+}
+#wrapper-list1>p, #wrapper-list2>p{
+	border-bottom:1px dotted rgb(35, 35, 35);
+}
+#wrapper-drop-menu1, #wrapper-drop-menu2{
+	background-color:white;
+	box-shadow:-4px 4px 16px rgba(0, 0, 0, 0.15);
+}
+#wrapper-drop-menu1>p, #wrapper-drop-menu2>p{
+	border-bottom:1px rgb(230, 230, 230) solid;
+}
+#wrapper-drop-menu1>p:hover, #wrapper-drop-menu2>p:hover{
+	background-color:rgb(240, 240, 240);
+}
+#wrapper-drop-menu1>p:active, #wrapper-drop-menu2>p:active{
+	background-color:rgb(230, 230, 230);
+}
+/* Конец выпадающее меню и опции плейлистов*/
+
+
+
+
+/*15. Начало стилей дива с композицией*/
+.save-sign{
+	background-image:url(../images/controls-light/save-sign.gif);
+}
+.delete-sign{
+	background-image:url(../images/controls-light/delete-sign.gif);
+}
+.add-in-playlist-sign{
+	background-image:url(../images/controls-light/add-in-playlist-sign.png);
+}
+.track:hover{
+	background: rgb(220,230,240); /* Old browsers */
+	background: -moz-linear-gradient(left,  rgb(220,230,240) 0%, rgb(220,210,220) 85%, rgb(220,210,220) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgb(220,230,240)), color-stop(85%,rgb(220,210,220)), color-stop(100%,rgb(220,210,220))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgb(220,230,240) 0%,rgb(220,210,220) 85%,rgb(220,210,220) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgb(220,230,240) 0%,rgb(220,210,220) 85%,rgb(220,210,220) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgb(220,230,240) 0%,rgb(220,210,220) 85%,rgb(220,210,220) 100%); /* IE10+ */
+	background: linear-gradient(left,  rgb(220,230,240) 0%,rgb(220,210,220) 85%,rgb(220,210,220) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dce6f0', endColorstr='#dcd2dc',GradientType=1 ); /* IE6-9 */
+}
+.track:hover .track_duration{
+	background-image: url(../images/controls-light/track_duration-hover.png);
+}
+.track-selected{
+	color:white;
+	background: rgb(80,170,220); /* Old browsers */
+	background: -moz-linear-gradient(left,  rgb(80,170,220) 0%, rgb(100,0,100) 85%, rgb(100,0,100) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgb(80,170,220)), color-stop(85%,rgb(100,0,100)), color-stop(100%,rgb(100,0,100))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* IE10+ */
+	background: linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#50aadc', endColorstr='#640064',GradientType=1 ); /* IE6-9 */
+}
+.track-selected .track_artist, .track-selected .track_name, .track-selected .track_album, .track-selected .track_duration{
+	color:white;
+}
+.track-selected>.track_duration{
+	background-image:url(../images/controls-light/track_duration-selected.png);
+	color:white;
+}
+.track-selected:hover{
+	background: rgb(80,170,220); /* Old browsers */
+	background: -moz-linear-gradient(left,  rgb(80,170,220) 0%, rgb(100,0,100) 85%, rgb(100,0,100) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgb(80,170,220)), color-stop(85%,rgb(100,0,100)), color-stop(100%,rgb(100,0,100))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* IE10+ */
+	background: linear-gradient(left,  rgb(80,170,220) 0%,rgb(100,0,100) 85%,rgb(100,0,100) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#50aadc', endColorstr='#640064',GradientType=1 ); /* IE6-9 */
+}
+.track-selected:hover .track_duration{
+	background-image: url(../images/controls-light/track_duration-selected.png);
+}
+.track_artist{
+	color:rgb(35, 35, 35);
+}
+.track_name{
+	color:rgb(35, 35, 35);
+}
+.line-between-track{
+}
+.track_album{
+	color:rgb(150, 150, 150);
+}
+.track_album p{
+	border-bottom:1px dashed rgb(150, 150, 150);
+}
+.track-selected .track_album p{
+	border-color:white;
+}
+.track_duration{
+	background-image:url(../images/controls-light/jp-current-time-bg.png);
+	color:rgb(35, 35, 35);
+}
+/*Конец стилей дива с композицией*/

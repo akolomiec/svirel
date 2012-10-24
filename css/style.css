@@ -1,0 +1,783 @@
+@import url(reset.css);
+/*1. Начало основных стилей*/
+body{
+	font:12px/16px "Segoe UI","HelveticaNeue-Light","Helvetica Neue",Helvetica, Arial, sans-serif;
+}
+.right{
+	float:right;
+}
+.hide{
+	display:none;
+}
+.border-radius-top-left, .border-radius-top-right, .border-radius-bottom-left, .border-radius-bottom-right{
+	height:3px;
+	width:3px;
+	position:absolute;
+}
+.border-radius-top-left{
+	top:0; left:0;
+}
+.border-radius-top-right{
+	top:0; right:0;
+}
+.border-radius-bottom-left{
+	bottom:0; left:0;
+}
+.border-radius-bottom-right{
+	bottom:0; right:0;
+}
+.relative{
+	position:relative;
+}
+#wrapper-general-for-content{
+	padding-bottom:40px;
+}
+/*Конец основных стилей*/
+
+
+
+
+/*2. Начало стиля кнопки*/
+.btn{
+	display: inline-block;
+	padding:4px 8px 2px 8px;
+	height:14px;
+	background-repeat:no-repeat, no-repeat, repeat-x;
+	background-position:left top, right top, center top;
+	cursor:pointer;
+	line-height:10px;
+	}
+.btn:hover{
+	background-repeat:no-repeat, no-repeat, repeat-x;
+	background-position:left center, right center, center center;
+	}
+.btn:active{
+	background-repeat:no-repeat, no-repeat, repeat-x;
+	background-position:left bottom, right bottom, center bottom;
+}
+/*Конец стиля кнопки*/
+	
+	
+	
+	
+
+/*3. Начало стиля маленькой кнопки*/
+.btn-small{
+	display: inline-block;
+	padding:3px 6px 0 6px;
+	height:13px;
+	background-repeat:no-repeat, no-repeat, repeat-x;
+	background-position:left top, right top, center top;
+	cursor:pointer;
+	font-size:10px;
+	line-height:10px;
+	}
+.btn-small:hover{
+	background-repeat:no-repeat, no-repeat, repeat-x;
+	background-position:left center, right center, center center;
+	}
+.btn-small:active{
+	background-repeat:no-repeat, no-repeat, repeat-x;
+	background-position:left bottom, right bottom, center bottom;
+}
+.full-width{
+	width:100%;
+}
+/*Конец стиля маленькой кнопки*/
+
+
+
+
+
+
+/*4. Начало каркаса фиксированного дива с плеером + тень под плеером*/
+#fixed-wrapper{
+	height:100px;
+	width:100%;
+	position:fixed;
+	z-index:3;
+}
+#shadow-under-pleer{
+	height:8px;
+}
+.min-max-div{
+	min-width:945px;
+	max-width:1350px;
+	margin:0 auto;
+}
+/*Конец каркаса фиксированного дива с плеером*/
+
+
+
+
+
+
+
+/*5. Начало каркаса таблиц*/
+#fixed-wrapper .wrapper-table{ /*Этот стиль только для таблицы с плеером*/
+	height:92px;
+}
+.wrapper-table{
+	width:100%;
+	vertical-align:top;
+	table-layout:fixed;
+}
+.p2{
+	width:2%;
+}
+.p7{
+	width:7%;
+}
+.p43{
+	width:43%;
+}
+.px216{
+	width:216px;
+}
+/*Конец каркаса таблиц*/
+
+
+
+
+
+
+/*5. Начало контролов правого блока плеера*/
+#table-for-search-input td{
+	vertical-align:top;
+	padding-top:32px;
+}
+.margin32{
+	margin-top:32px;
+	padding-align:top;
+}
+#for-search-input{
+	padding-right:16px;
+	width:100%;
+}
+#search-input{
+	width:100%;
+	border:0;
+	padding:0px 5px 0 5px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	height:20px;
+	font-size:12px;
+	line-height:9px;
+}
+#div-last-search{
+	height:16px;
+	margin-top:4px;
+	overflow:hidden;
+	display:block;
+}
+#div-last-search p{
+	display:inline-block;
+	font-size:10px;
+	line-height:10px;
+	padding:3px 0 0 0;
+	margin:0 12px 0 0;
+	vertical-align:top;
+	border-bottom:1px dotted rgb(35, 35, 35);
+	cursor:pointer;
+}
+/*Конец контролов правого блока плеера*/
+
+
+
+/*6. Начало средней колонки контролов плеера*/
+#wrapper-for-main-player{
+	padding-top:20px;
+	height:36px;
+	position:relative;
+}
+.jp-prev{
+	width:20px;
+	height:20px;
+	background-repeat:no-repeat;
+	margin:12px 7px 0 0;
+	cursor:pointer;
+	float:left;
+}
+.jp-next{
+	width:20px;
+	height:20px;
+	background-repeat:no-repeat;
+	margin:12px 7px 0 0;
+	cursor:pointer;
+	float:left;
+}
+.jp-play, .jp-pause{
+	width:26px;
+	height:26px;
+	background-repeat:no-repeat;
+	margin:9px 7px 0 0;
+	cursor:pointer;
+	float:left;
+}
+.jp-prev:hover, .jp-next:hover, .jp-play:hover, .jp-pause:hover{
+	background-repeat:no-repeat;
+	background-position:left center;
+	cursor:pointer;
+}
+.jp-prev:active, .jp-next:active, .jp-play:active, .jp-pause:active{
+	background-repeat:no-repeat;
+	background-position:left bottom;
+	cursor:pointer;
+}
+#wrapper-name-song-and-artist{
+	height:21px;
+	margin:-2px 0 0 88px;
+	overflow:hidden;
+}
+.jp-name-artist{
+	font-weight:900;
+	line-height:18px;
+	overflow:hidden;
+	word-wrap:nowrap;
+	height:19px;
+}
+.jp-name-song{
+	font-weight:100;
+	line-height:18px;
+	height:19px;
+}
+.jp-current-time{
+	height:19px;
+	width:40px;
+	background-image:url(../images/controls-light/jp-current-time-bg.png);
+	position:absolute;
+	right:0px;
+	top:20px;
+	text-align:right;
+	line-height:14px;
+}
+.jp-progress{
+	height:6px;
+	margin:0 0 0 88px;
+	background-image:url(../images/controls-light/bg-jp-progress.png);
+	overflow:hidden;
+	position:relative;
+}
+.jp-seek-bar{
+	height:6px;
+	width:50%;/*Изменяемый параментр*/
+}
+.jp-play-bar{
+	height:6px;
+	width:50%;/*Изменяемый параментр*/
+}
+.btn-under-progress{
+	margin:0px 0 0 4px;
+	float:right;
+}
+/*Конец средней колонки контролов плеера*/
+
+
+
+
+
+
+/*7. Начало правой колонки контролов плеера*/
+#wrapper-for-sound-progress{
+	height:20px;
+	padding:32px 0 0 0px;
+}
+.jp-unmute, .jp-mute{
+	height:20px;
+	width:15px;
+	float:left;
+	background-position:left top;
+}
+.jp-unmute:hover, .jp-mute:hover{
+	background-position:left top;
+}
+.jp-unmute:hover, .jp-mute:hover{
+	background-position:left bottom;
+}
+.jp-volume-bar{
+	height:6px;
+	width:71px;
+	overflow:hidden;
+	margin:7px 10px 0 0;
+	float:left;
+	position:relative;
+}
+.jp-volume-bar-value{
+	height:6px;
+	width:50%;/*Изменяемый параментр*/
+}
+.jp-repeat, .jp-repeat-off{
+	height:20px;
+	width:20px;
+	float:left;
+	background-position:left top;
+	margin:0px 10px 0 0;
+}
+.jp-repeat:hover, .jp-repeat-off:hover{
+	background-position:left bottom;
+}
+.jp-shuffle, .jp-shuffle-off{
+	height:20px;
+	width:20px;
+	float:left;
+	background-position:left top;
+	margin:0px 10px 0 0;
+}
+.jp-shuffle:hover, .jp-shuffle-off:hover{
+	background-position:left bottom;
+}
+.scan, .scan-off{
+	height:20px;
+	width:58px;
+	float:left;
+	background-position:left top;
+}
+.scan:hover, .scan-off:hover{
+	background-position:left bottom;
+}
+/* Конец правой колонки контролов плеера*/
+
+
+
+/*8. Начало большой таблицы с основным содержимом*/
+#wrapper-table-main{
+	width:100%;
+	padding:104px 0 0 0;
+}
+#for-px216-main{
+	padding-top:20px;
+}
+/*Конец большой таблицы с основным содержимом*/
+
+
+
+/*9. Начало правого блока основного содержимого. Форма регистрации*/
+.header-right-block{
+	font:100 22px/24px "Segoe UI Light", "Segoe UI","HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;
+	padding:23px 0 5px 0px;
+	width:216px;
+	word-wrap:break-word;
+}
+.header-right-block span{
+	cursor:pointer;
+}
+.help-in-right-block{
+	font:14px/16px "Segoe UI Light", "Segoe UI","HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;
+	padding:2px 0 2px 0;
+}
+.login-in-right-block{
+	font-weight:900;
+	padding:11px 0 1px 0;
+	line-height:16px;
+}
+#login-error, #pass-error{
+	font-size:10px;
+	line-height:10px;
+	font-weight:500;
+	vertical-align:baseline;
+	display:none;
+}
+.input-in-right-block{
+	width:206px;
+	border:0;
+	padding:0px 5px 0 5px;
+	margin:0px 0 0 0;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	height:20px;
+	font-size:12px;
+}
+.btn-registration{
+	margin:12px 0 12px 0;
+}
+#btn-register-vk{
+	height:24px;
+	width:98px;
+}
+#btn-register-vk:hover{
+	background-position:right center;
+}
+#btn-register-vk:active{
+	background-position:right bottom;
+}
+/*Конец правого блока основного содержимого. Форма регистрации*/
+
+
+
+
+
+/*10. Начало правого блока основного содержимого. Об артисте и лучшие песни*/
+#name-album-in-right-block{
+	padding:1px 0 7px 0;
+	line-height:12px;
+}
+#name-album-in-right-block span{
+	border-bottom:1px dashed rgb(35, 35, 35);
+}
+#name-album-in-right-block span:hover{
+	border-bottom:1px dashed red;
+	cursor:pointer;
+}
+#album-cover{
+	width:174px;
+	height:174px;
+	margin-bottom:2px;
+}
+#highlight{
+	width:174px;
+	height:174px;
+	background-repeat:no-repeat;
+}
+.artist-s-best-song{
+	line-height:16px;
+	padding:3px 0 5px 0;
+	margin:0;
+}
+.artist-s-best-song>span{
+	border-bottom:1px dashed rgb(35, 35, 35);
+	line-height:16px;
+	cursor:pointer;
+}
+.artist-s-best-song>span:hover{
+	border-bottom:1px dashed red;
+}
+/* Конец правого блока основного содержимого. Об артисте и лучшие песни*/
+
+
+
+
+/*11. Начало правого блока основного содержимого. О пользователе*/
+.my-playlist, .my-playlist-recommend{
+	line-height:16px;
+	padding:3px 4px 9px 4px;
+	margin:0 -4px;
+	border-radius:3px;
+}
+.my-playlist>span, .my-playlist-recommend>span{
+	border-bottom:1px dashed rgb(35, 35, 35);
+	cursor:pointer;
+}
+.my-playlist>span:hover, .my-playlist-recommend>span:hover{
+	border-bottom:1px dashed red;
+}
+#btn-new-playlist{
+	margin:12px 0 0px 0 !important;
+}
+#btn-del-playlist{
+	margin:12px 0 0px 4px;
+}
+/* Конец правого блока основного содержимого. О пользователе*/
+
+
+
+
+/*12. Начало футера*/
+#footer{
+	background-repeat:repeat-x;
+	font-size:10px;
+}
+.min-max-div-footer{
+	min-width:945px;
+	max-width:1350px;
+	margin:0 auto;
+}
+.wrapper-table-footer{
+	width:100%;
+}
+.wrapper-table2-footer{
+	width:100%;
+}
+#footer h2{
+	line-height:16px;
+	font-size:10px;
+}
+#footer span{
+	padding-right:16px;
+}
+#footer .p43, #footer .px216{
+	padding:12px 0;
+}
+/*12. Конец футера*/
+
+
+
+
+
+
+/*13. Начало категорий ТОП 100, ЖАНРОВ, РАДИО, отступ средней колонки и стили h1*/
+#cetegories{
+	height:16px;
+	padding-top:4px;
+	overflow:hidden;
+}
+#top100, #top-genre, #radio{
+	height:15px;
+	display:inline-block;
+	padding:1px 4px 0 4px;
+	margin:0 12px 0 0px;
+	cursor:pointer;
+	position:relative;
+}
+#top100 p, #top-genre p, #radio p{
+	line-height:10px;
+}
+#cetegories p, #cetegories p, #cetegories p{
+	display:inline-block;
+	border-bottom:1px dotted rgb(105, 105, 105);
+	line-height:12px;
+}
+.wrapper-playlist{
+	padding-top:20px;
+}
+h1{
+	font:38px/44px "Segoe UI Light", "Segoe UI","HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-weight:100;
+	padding:6px 0 0 0;
+	height:47px;
+	overflow:hidden;
+	word-wrap:break-word;
+	display: block ;
+	white-space:nowrap;
+}
+/*13. Конец категорий ТОП 100, ЖАНРОВ, РАДИО, отступ средней колонки и стили h1*/
+
+
+
+
+
+/*14. Начало выпадающее меню и опции плейлистов*/
+#wrapper-list3{
+	display:inline-block;
+	position:relative;
+	border-bottom:1px dotted rgb(35, 35, 35);
+	line-height:12px;
+	margin-top:-3px;
+	cursor:pointer;
+}
+.wrapper-for-drop-menu{
+	height:16px;
+	margin-top:3px;
+}
+#wrapper-list1, #wrapper-list2{
+	display:inline-block;
+	position:relative;
+}
+#wrapper-list1:hover #wrapper-drop-menu1, #wrapper-list2:hover #wrapper-drop-menu2{
+	display:block;
+}
+#wrapper-list1>p, #wrapper-list2>p{
+	display:inline-block;
+	border-bottom:1px dotted rgb(35, 35, 35);
+	line-height:12px;
+	margin-top:-3px;
+	margin-right:12px;
+	cursor:pointer;
+}
+#wrapper-drop-menu1, #wrapper-drop-menu2{
+	width:224px;
+	box-shadow:-4px 4px 16px rgba(0, 0, 0, 0.15);
+	position:absolute;
+	top:16px;
+	left:-8px;
+	display:none;
+	z-index:4;
+}
+#wrapper-drop-menu1>p, #wrapper-drop-menu2>p{
+	line-height:16px;
+	padding:7px 8px 4px 8px;
+	border-bottom:1px rgb(230, 230, 230) solid;
+	cursor:pointer;
+}
+/* Конец выпадающее меню и опции плейлистов*/
+
+
+
+/*15. Начало стилей дива с композицией*/
+.save-sign{
+	height:20px;
+	width:20px;
+	background-position:4px 4px;
+	background-repeat:no-repeat;
+	position:absolute;
+	top:2px;
+	right:-20px;
+	display:none;
+}
+.delete-sign{
+	height:20px;
+	width:20px;
+	background-position:4px 4px;
+	background-repeat:no-repeat;
+	position:absolute;
+	top:22px;
+	right:-20px;
+	display:none;
+}
+.add-in-playlist-sign{
+	height:20px;
+	width:20px;
+	background-position:4px 4px;
+	background-repeat:no-repeat;
+	position:absolute;
+	top:22px;
+	right:-20px;
+	display:none;
+}
+.track{
+	height:37px;
+	position:relative;
+	padding:7px 0 0 0;
+	position:relative;
+}
+.track:hover{
+	margin:0 -8px 0 -8px;
+}
+.track:hover>.save-sign, .track:hover>.delete-sign,
+.track-selected:hover>.save-sign, .track-selected:hover>.delete-sign{
+	display:block;
+}
+.track:hover .track_duration{
+	background-repeat:no-repeat;
+	padding-right:8px;
+}
+.track:hover .wrapper-song-and-artist{
+	padding-left:8px;
+}
+.track:hover .track_album{
+	padding-left:8px;
+}
+.track-selected{
+	position:relative;
+	padding:7px 8px 0 8px;
+	margin:0 -8px 0 -8px;
+	position:relative;
+}
+.track-selected>.track_duration{
+	background-repeat:no-repeat;
+	padding-right:8px;
+}
+.track-selected:hover .track_duration{
+	background-repeat:no-repeat;
+	padding-right:8px;
+}
+.track-selected:hover .wrapper-song-and-artist{
+	padding-left:0px;
+}
+.track-selected:hover .track_album{
+	padding-left:0px;
+}
+.wrapper-song-and-artist{
+	height:16px;
+	overflow:hidden;
+	white-space: nowrap;
+}
+.track_artist{
+	display:inline;
+	font-weight:900;
+}
+.track_name{
+	display:inline;
+}
+.line-between-track{
+	display:inline;
+	line-height:12px;
+}
+.track_album{
+	line-height:14px;
+	margin:1px 0 0 0;
+	overflow:hidden;
+	height:14px;
+	white-space: nowrap;
+}
+.track_album p{
+	display:inline-block;
+	border-bottom:1px dashed rgb(150, 150, 150);
+	line-height:12px;
+	cursor:pointer;
+	padding-top:1px;
+}
+.track_duration{
+	position:absolute;
+	right:0px;
+	top:0px;
+	height:44px;
+	width:40px;
+	background-image:url(../images/controls-light/jp-current-time-bg.png);
+	text-align:right;
+	padding-top:7px;
+}
+.left-block-top100>div:hover .add-in-playlist-sign,
+.left-block-top10-genre>div:hover .add-in-playlist-sign{
+	display:block;
+}
+/*Конец стилей дива с композицией*/
+
+
+/* Библиотека Stikr */
+#jquery-stickers {
+    z-index: 6;
+}
+
+.stick {
+    margin:5px;
+    padding:15px;
+    width:200px;
+}
+.exit {
+    background:url('../images/exit.png') no-repeat;
+    width:16px;
+    height:16px;
+    float:right;
+    margin:-5px -5px 0 0;
+    cursor:pointer;
+}
+.classic {
+    border:1px solid #A7CD10;
+    background-color:#E1FAB8;
+    border-radius:15px;
+    -moz-border-radius:15px;
+    -webkit-border-radius:15px;
+}
+.classic.error {
+    border:1px solid #E2365C;
+    background-color:#F7C8D2;
+}
+.opacity {
+    background:url('../images/bg.png');
+    color:#F4F4F4;
+}
+.next {
+    background:url('../images/bg1.png') repeat-x #FEF6BF;
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+}
+.last {
+    background-color:#CBECFA;
+    border:1px solid #15A6E3;
+}
+.click-ex {
+    width:50px;
+    height:20px;
+    border:1px solid #626262;
+    background:url('../images/pointer.gif') no-repeat left center #7A7A7A;
+    color:#F4F4F4;
+    float:left;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    padding-left:25px;
+    padding-top:10px;
+    margin-right:10px;
+    cursor:pointer;
+}
+.ex pre {
+    width:80%;
+}
+
+
+/* Конец библиотека Stikr */
+
+
