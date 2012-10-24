@@ -3,21 +3,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 $app->before(function (Request $request) use ($app){
-    //$app['monolog']->addInfo('Попытка выполнить before ', array('request' => $request->getRequestUri(), 'cookie' => $request->cookies));
     $app['session']->start();
-    //$app['monolog']->addInfo('Пользователь залогинен? ', array('islogedin' => CUser::isLogedin()));
-    if (CUser::isLogedin()) {
-
-    } else {
-        //$app['monolog']->addInfo(' Попытка первого входа.' );
-
+    if (!CUser::isLogedin()) {
         CUser::first_enter();
-
     }
-
     $token = Core::taketoken();
-    //$app['monolog']->addDebug('Запрос токена ', array('token' => $token) );
-
 });
 
 $app->get('/', function () use ($app) {
