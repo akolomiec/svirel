@@ -4,11 +4,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 $app->get('/media/{trackid}', function ($trackid) use ($app) {
-    Log::write("Файл в кеше не найден trackid={$trackid}", __LINE__);
     $trackid = substr($trackid, 0, -4);
     $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
     $data = json_decode($resp, true);
     $data = $data['response'];
+    if (strlen($data[0]['artist'] . "-" . $data[0]['title'] . ".mp3") >= 255 ) {
+        $data[0]['artist'] = substr($data[0]['artist'], 0 ,128);
+        $data[0]['title'] = substr($data[0]['title'], 0 ,120);
+    }
     $filename = $data[0]['artist'] . "-" . $data[0]['title'] . ".mp3";
     $url = $data[0]['url'];
     $size = Core::remotefilesize($url);
@@ -27,6 +30,7 @@ $app->get('/getprevtrack/', function () use ($app) {
         $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
         $data = json_decode($resp, true);
         $data = $data['response'];
+
         State::save($state['user_id'], $state['side'], $state['playlistid'], $state['search'], $serial, $state['currentpage'], $state['sort']);
         return json_encode(array('filename' => $filename, 'artist' => $data[0]['artist'], 'trak' => $data[0]['title']));
     } else {
