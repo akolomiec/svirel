@@ -14,28 +14,18 @@ $app->get('/', function () use ($app) {
     $app['monolog']->addInfo('Контроллер /');
     $app['session']->set('req', '');
     $title = $GLOBALS['conf']['main_title'];
-    //$app['monolog']->addDebug(' Готовим заголовок', array('title'=> $title));
-    return $app['twig']->render('index.twig', array(
-        'title' => $title,
-        'cookie_domain' => $GLOBALS['conf']['cookie_domain']
-        ));
-})
-    ->bind('homepage');
-
-
+    return $app['twig']->render('index.twig', array('title' => $title, 'cookie_domain' => $GLOBALS['conf']['cookie_domain']));
+})->bind('homepage');
 
 $app->post('/getleft/', function (Request $request) use ($app) {
     $side = 'left';
     $cont = $request->get('cont');
     $req = $request->get('req') ? $request->get('req') : null;
-
     switch($cont) {
     case "s":
-        Log::write (__FILE__."Выбран пункт s q=".$req,__LINE__);
-        if ($req) {
+        if (!empty($req)) {
             $req = $app->escape($req);
             $uid = CUser::GetUserId();
-            //Log::write (__FILE__."Обработали q=".$req,__LINE__);
             $header = "".$req;
             $page = 1;
 
