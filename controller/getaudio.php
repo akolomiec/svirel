@@ -60,12 +60,17 @@ $app->get('/getsong/{trackid}', function (Request $request, $trackid) use ($app)
         $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
         $data = json_decode($resp, true);
         $data = $data['response'];
+        if (strlen($data[0]['artist'] . "-" . $data[0]['title'] . ".mp3") >= 255 ) {
+            $data[0]['artist'] = substr($data[0]['artist'], 0 ,128);
+            $data[0]['title'] = substr($data[0]['title'], 0 ,120);
+        }
         $fname = $data[0]['artist'] . "-" . $data[0]['title'] . ".mp3";
         $url = $data[0]['url'];
         $size = Core::remotefilesize($url);
         if (Core::getfilevk($trackid, $url, $size)) {
             $fs = filesize($GLOBALS['conf']['upload_dir'] . $trackid . ".mp3");
         }
+
     } else {
         if (Core::GetFileName($trackid)) {
             if ($fname = Core::GetFileName($trackid)){
@@ -75,6 +80,10 @@ $app->get('/getsong/{trackid}', function (Request $request, $trackid) use ($app)
             $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
             $data = json_decode($resp, true);
             $data = $data['response'];
+            if (strlen($data[0]['artist'] . "-" . $data[0]['title'] . ".mp3") >= 255 ) {
+                $data[0]['artist'] = substr($data[0]['artist'], 0 ,128);
+                $data[0]['title'] = substr($data[0]['title'], 0 ,120);
+            }
             $fname = $data[0]['artist'] . "-" . $data[0]['title'] . ".mp3";
             $fs = filesize($GLOBALS['conf']['upload_dir'] . $trackid . ".mp3");
         }

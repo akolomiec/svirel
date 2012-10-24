@@ -309,6 +309,10 @@ class Core
         $sql = "SELECT `track_artist`, `track_title` FROM `playlist` WHERE `track_id` = '{$trackid}';";
         $res = $db->dbquery($sql);
         if ($res) {
+            if (strlen($res[0]['track_artist'] . "-" . $res[0]['track_title'] . ".mp3") >= 255 ) {
+                $res[0]['track_artist'] = substr($res[0]['track_artist'], 0 ,128);
+                $res[0]['track_title'] = substr($res[0]['track_title'], 0 ,120);
+            }
             return $res[0]['track_artist']."-".$res[0]['track_title'].".mp3";
         } else {
             return false;
