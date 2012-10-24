@@ -33,12 +33,16 @@ if (defined("AKPLAYER")) {
             $rows = mysql_affected_rows($base->db);
             $app['monolog']->addDebug(__FUNCTION__.' Запрос выполнен ' , array('sql' => $sql, 'rows' => $rows));
         }
-        static function Getserial($side = 'left', $playlistid = '') {
+        static function Getserial($side = 'left', $playlistid = '', $req = '') {
             global $app;
             $app['monolog']->addDebug(__FUNCTION__.' Посмотрим какой файл поет: ', array('side' => $side, 'playlistid' => $playlistid));
             $uid = CUser::GetUserId();
             $base = new DB;
-            $sql = "SELECT `serial` FROM `state` WHERE `user_id` = '{$uid}' AND `playlistid`='{$playlistid}';";
+            if (!empty($req) AND $playlistid = 'search'){
+                $sql = "SELECT `serial` FROM `state` WHERE `user_id` = '{$uid}' AND `playlistid`='search' AND `search` = '{$req}';";
+            } else {
+                $sql = "SELECT `serial` FROM `state` WHERE `user_id` = '{$uid}' AND `playlistid`='{$playlistid}';";
+            }
             $res = $base->dbquery($sql);
             $app['monolog']->addDebug(__FUNCTION__.' sql ', array('sql' => $sql, 'res' => $res));
             if (is_array($res)) {

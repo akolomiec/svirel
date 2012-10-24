@@ -17,6 +17,7 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('index.twig', array('title' => $title, 'cookie_domain' => $GLOBALS['conf']['cookie_domain']));
 })->bind('homepage');
 
+//todo Сделать нормальную проверку входных данных
 $app->post('/getleft/', function (Request $request) use ($app) {
     $side = 'left';
     $cont = $request->get('cont');
@@ -28,12 +29,8 @@ $app->post('/getleft/', function (Request $request) use ($app) {
             $uid = CUser::GetUserId();
             $header = "".$req;
             $page = 1;
-
             if ($list = Core::Search($req, $GLOBALS['conf']['trackperpage'],0)) {
-               // Log::write (__FILE__."нашли композиции".$req,__LINE__);
-
                 $reslt = $list['response'];
-
                 $list = null;
 				$i=0;
                 foreach ($reslt as $key => $value) {
@@ -51,10 +48,11 @@ $app->post('/getleft/', function (Request $request) use ($app) {
                         $list[] = $value;
                     }
                 }
+                $reslt = null;
                 $app['session']->set('req', $req);
                 LastSearch::SetLastSearch($uid,$req);
                 $category = 'search';
-                $serial = State::Getserial($side, $category);
+                $serial = State::Getserial($side, $category, $req);
                 return $app['twig']->render('left.twig', array(
                     'header' => $header,
                     'page' => $page,
@@ -67,16 +65,13 @@ $app->post('/getleft/', function (Request $request) use ($app) {
                 ));
             }
         } else { $app['session']->set('req', ''); }
-
         break;
     default:
-        Log::write (__FILE__."Выбран пункт по умолчанию ТОП100",__LINE__);
         $header = "ТОП 100";
         $page = 1;
         $totalpages = 5;
         if ($list = Core::GetTop100($GLOBALS['conf']['trackperpage'],0)){
             $reslt = $list['response'];
-            //Log::write (__FILE__."Gettop100=".var_export($list,true),__LINE__);
             $list = null;
             $i=0;
             foreach ($reslt as $key => $value) {
@@ -95,7 +90,6 @@ $app->post('/getleft/', function (Request $request) use ($app) {
                     $list[] = $value;
                 }
             }
-            Log::write (__FILE__." запуск шаблонизатора".var_export($list,true),__LINE__);
             $category = 'top100';
             $serial = State::Getserial($side, $category);
             return $app['twig']->render('left.twig', array(
@@ -109,11 +103,11 @@ $app->post('/getleft/', function (Request $request) use ($app) {
                 'category' => $category
             ));
         } else {
+            die ("Не могу загрузить ни один плейлист");
         }
         break;
     }
-})
-    ->bind('getleft');
+})->bind('getleft');
 
 
 //todo сделать нормальную проверку входных данных

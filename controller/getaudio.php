@@ -75,9 +75,9 @@ $app->get('/getnexttrack/', function () use ($app) {
 
 $app->get('/getsong/{trackid}', function (Request $request, $trackid) use ($app) {
     session_write_close();
-    $trackid = substr($trackid, 0, -4);
+    //$trackid = substr($trackid, 0, -4);
+
     if (!file_exists($GLOBALS['conf']['upload_dir'] . $trackid . ".mp3")) {
-        Log::write("Файл в кеше не найден trackid={$trackid}", __LINE__);
         //todo проверять на выдачу нескольких экземпляров
         //todo Сделать объект для tracka
         $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
@@ -86,30 +86,24 @@ $app->get('/getsong/{trackid}', function (Request $request, $trackid) use ($app)
         $fname = $data[0]['artist'] . "-" . $data[0]['title'] . ".mp3";
         $url = $data[0]['url'];
         $size = Core::remotefilesize($url);
-        Log::write("trackid={$trackid} url={$url} filename={$fname} size={$size}", __LINE__);
         if (Core::getfilevk($trackid, $url, $size)) {
-            Log::write(__FILE__ . "Файл помещен в кеш trackid={$trackid}", __LINE__);
             $fs = filesize($GLOBALS['conf']['upload_dir'] . $trackid . ".mp3");
         }
     } else {
         if (Core::GetFileName($trackid)) {
-
-            $fname = Core::GetFileName($trackid);
-            Log::write(__FILE__ . ": Fname =" . var_export($fname, true), __LINE__);
-            $fs = filesize($GLOBALS['conf']['upload_dir'] . $trackid . ".mp3");
+            if ($fname = Core::GetFileName($trackid);){
+                $fs = filesize($GLOBALS['conf']['upload_dir'] . $trackid . ".mp3");
+            }
         } else {
             Log::write(__FILE__ . ": File name не найден в базе, надо идти в vk.com", __LINE__);
             $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
             $data = json_decode($resp, true);
             $data = $data['response'];
             $fname = $data[0]['artist'] . "-" . $data[0]['title'] . ".mp3";
-            Log::write(__FILE__ . ": data =" . var_export($data, true), __LINE__);
-            Log::write(__FILE__ . ": Fname =" . var_export($fname, true), __LINE__);
             $fs = filesize($GLOBALS['conf']['upload_dir'] . $trackid . ".mp3");
         }
     }
 
-    Log::write(__FILE__ . ": File name =" . var_export($fname, true), __LINE__);
     $fileurl = $GLOBALS['conf']['upload_dir'] . $trackid . ".mp3";
     header("Content-Length: {$fs}");
     header('Last-Modified:');

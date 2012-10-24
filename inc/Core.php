@@ -305,12 +305,9 @@ class Core
    }
 //todo выдача нормального имени файла
     public static function GetFileName($trackid) {
-        Log::write ("Downloaded file {$trackid}",__LINE__);
         $db = new DB;
         $sql = "SELECT `track_artist`, `track_title` FROM `playlist` WHERE `track_id` = '{$trackid}';";
-        Log::write(__FUNCTION__.": Запрос {$sql}",__LINE__);
         $res = $db->dbquery($sql);
-        Log::write(__FUNCTION__.": Результат: ".var_export($res,true),__LINE__);
         if ($res) {
             return $res[0]['track_artist']."-".$res[0]['track_title'].".mp3";
         } else {
