@@ -51,7 +51,6 @@ if (defined("AKPLAYER")) {
             global $app;
             $this->db = mysql_connect("{$this->dbhost}:{$this->dbport}", "{$this->dbusername}", "{$this->dbpass}");
             if ($this->db) {
-                //$app['monolog']->addInfo(__FUNCTION__.' Подключение к базе прошло нормально');
                 mysql_select_db($this->dbname);
                 mysql_query("SET NAMES {$this->dbcharset}");
                 mysql_set_charset("utf8");
@@ -65,30 +64,23 @@ if (defined("AKPLAYER")) {
         }
         public function dbquery ($sql) {
             global $app;
-            //$app['monolog']->addInfo(__FUNCTION__.' Выполнение запроса', array('sql' => $sql));
             $this->result = mysql_query($sql);
             if(mysql_errno()) {
-                //$app['monolog']->addError(__FUNCTION__.' Ошибка выполнения запроса', array('sql_errorno' => mysql_errno(), 'sql_msg' => mysql_error()));
+                $app['monolog']->addError(__FUNCTION__.' Ошибка выполнения запроса', array('sql_errorno' => mysql_errno(), 'sql_msg' => mysql_error()));
                 return false;
             }
             if (!is_bool($this->result)){
                 $rows = mysql_num_rows($this->result);
-                //$app['monolog']->addDebug(__FUNCTION__.' Количество записей', array('rows' => $rows));
                 if ($rows) {
-
                     while ($row = mysql_fetch_assoc($this->result)) {
                         $data[] = $row;
                     }
-                    //var_dump($data);
-                    //$app['monolog']->addDebug(__FUNCTION__.' Возвращаем массив данных', array('data' => $data));
                     return $data;
                 } else {
-                    //$app['monolog']->addinfo(__FUNCTION__.' Записей в базе не найдено возвращаем false');
                     return false;
                 }
             } else {
                 $rows = mysql_affected_rows($this->db);
-                //$app['monolog']->addDebug(__FUNCTION__.' Затронуто записей', array('rows' => $rows));
                 return true;
             }
 

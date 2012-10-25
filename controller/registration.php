@@ -37,7 +37,7 @@ $app->get('/logout/', function (Request $request) use ($app) {
     return $app['twig']->render('registration.twig', array());
 });
 
-
+//todo При регистрации не создается плейлист по умолчанию.
 $app->post('/reg/', function (Request $request) use ($app) {
     $lastuid = CUser::GetUserId();
     $lastpl = Plist::GetmyPlaylistId($lastuid);

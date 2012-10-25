@@ -269,21 +269,17 @@ function init () {
     });
     $('input#search-input').submit(function (event) {
         event.preventDefault();
-
         search();
-
         return false;
     });
     $('h1').gradientText({
         colors: ['#50AADC', '#640064']
     });
-
     top100_button = $("#top100");
     top100_button.unbind('click');
     top100_button.bind('click', function (){
         drawleft();
     });
-
     logout_button = $("#go-out");
     logout_button.unbind('click');
     logout_button.bind('click', function () {
@@ -296,7 +292,6 @@ function init () {
         event.stopPropagation();
         addinplaylist($(this).parent());
     });
-
     delete_from_playlist_button = $(".delete-sign");
     delete_from_playlist_button.unbind('click');
     delete_from_playlist_button.bind('click', function (event) {
@@ -339,6 +334,13 @@ function init () {
     delete_playlist_button = $("#btn-del-playlist");
     delete_playlist_button.unbind('click');
     delete_playlist_button.bind('click', function (event) {
+        var playlistid = $(".pl").attr("id");
+        delplaylist(playlistid);
+    });
+
+    delete_playlist_button2 = $(".del-playlist-item");
+    delete_playlist_button2.unbind('click');
+    delete_playlist_button2.bind('click', function (event) {
         var playlistid = $(".pl").attr("id");
         delplaylist(playlistid);
     });
@@ -612,6 +614,7 @@ function drawright(){
         type:	 'POST',
         success: function(response, code){
             $("#registration").html(response);
+
             $.stickr({note:'Запрос drawright выполнен',className:'opacity',position:{right:0,top:0}});
         },
         error:  function(xhr, str){
@@ -714,7 +717,7 @@ function delplaylist(playlistid) {
 }
 function drawcenter(playlist, page){
     $.stickr({note:'Загружаем центральную колонку',className:'opacity',position:{right:0,top:0}});
-    if (typeof(playlist) == "undefined") {
+    if (typeof(playlist) == "undefined" || playlist == "") {
         playlist = "default";
     }
     if (typeof(page) == "undefined") {

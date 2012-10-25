@@ -1,5 +1,4 @@
     <p class="header-right-block">{{ username }}</p>
-    <p class="my-playlist" id="default"><span>Мой плейлист</span></p>
     <p class="my-playlist"><span>Недавно проигрываемые</span></p>
     {% for item in list %}
     <p class="my-playlist" id="{{ item.id }}"><span>{{ item.name }}</span></p>
