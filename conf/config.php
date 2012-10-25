@@ -8,25 +8,25 @@ if (defined("AKPLAYER")) {
 
 // Production debug off
     $GLOBALS['conf'] = array(
-        'web_root' => 'http://svirel.akmain.org/',
+        'web_root' => 'http://akmain.org/',
         'upload_dir' => APPLICATION_PATH.DS.'media'.DS,
-        'main_title' => 'AK-Player самый обыкновенный MP3 в браузере',
-        'db_host' => 'localhost',
-        'db_user' => 'root',
-        'db_password' => 'KRUS56_ak+',
+        'main_title' => '',
+        'db_host' => '',
+        'db_user' => '',
+        'db_password' => '',
         'db_port' => '3306',
-        'db_name' => 'akplayer_test',
+        'db_name' => '',
         'db_charset' => 'utf8',
-        'email' => 'akolomiec@mail.ru',
-        'password' => 'KRUS56_ak+',
-        'AppId' => '2940672',
-        'AppSecret' => 'A92zngusWGASXGqfGvmF',
+        'email' => '',
+        'password' => '',
+        'AppId' => '',
+        'AppSecret' => '',
         'OAuthCallback' => 'vkauth',
         'VKScope' => 'audio',
         'trackperpage' => 20,
         'uagent' =>  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1",
         'cookies' => APPLICATION_PATH.DS.'log'.DS."cookie",
-        'cookie_domain' => 'svirel.akmain.org'
+        'cookie_domain' => ''
     );
 }
 
