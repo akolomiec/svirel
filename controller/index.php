@@ -112,7 +112,7 @@ $app->post('/getleft/', function (Request $request) use ($app) {
 
 
 //todo сделать нормальную проверку входных данных
-$app->get('/getcenter/{playlistid}/{page}', function (Request $request, $playlistid,$page) use ($app) {
+$app->get('/getcenter/{playlistid}/{page}', function (Request $request, $playlistid, $page) use ($app) {
     $side = "right";
     $app['monolog']->addInfo('Контроллер /getcenter/ ', array('request' => $request->getRequestUri(), 'cookie' => $request->cookies, 'playlistid' => $playlistid, 'page' => $page));
     $userid = CUser::GetUserId();
@@ -132,7 +132,6 @@ $app->get('/getcenter/{playlistid}/{page}', function (Request $request, $playlis
             ));
         } else {
             $page = 1;
-
             $list = Plist::GetmyPlaylist($userid, 0);
             $playlistid = Plist::GetmyPlaylistId($userid);
             $tracks = Plist::trackCount($playlistid);

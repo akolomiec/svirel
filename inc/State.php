@@ -57,7 +57,7 @@ if (defined("AKPLAYER")) {
                 }
             }
         }
-        //todo Просто дописать процедуру.
+
         static function GetSongbySerial($serial) {
             global $app;
             if (isset($serial)) {

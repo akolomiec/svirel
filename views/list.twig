@@ -1,7 +1,7 @@
 
     {% for track in list %}
     <div class="track{% if trackselect == track.serial %} track-selected {% endif %}" track-id="{{ track.owner_id|e }}_{{ track.aid|e }}" serial="{{ track.serial|e }}"><!--В диве композиция-->
-        <a href ="/getsong/{{ track.owner_id|e }}_{{ track.aid|e }}" title="Скачать {{ track.artist|e }} - {{ track.title|e }} бесплатно" class="save-sign"></a>
+        <a href ="/getsong/{{ track.owner_id|e }}_{{ track.aid|e }}" title="Скачать {{ track.artist|e }} - {{ track.title|e }} бесплатно" class="save-sign" target="_blank"></a>
         <div class="add-in-playlist-sign"></div>
         <div class="border-radius-top-left"></div>
         <div class="border-radius-top-right"></div>

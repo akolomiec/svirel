@@ -46,7 +46,6 @@ $app->post('/reg/', function (Request $request) use ($app) {
     if (CUser::checkLogin($login)) {
 	CUser::DeleteUser($lastuid);
         if ($id = CUser::login($login,$pass)) {
-
             return new Response(json_encode(array('id' => $id)), 200);
         } else {
             return new Response(json_encode(array('code' => 1)), 200);

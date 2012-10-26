@@ -20,8 +20,6 @@ $app->post('/state/save/', function (Request $request) use ($app) {
     $serial = $request->get('serial');
     $currentpage = $request->get('currentpage');
     $sort = $request->get('sort');
-    //$app->escape($name)
-    //todo Записать в базу всю эту ахинею...
     State::save($app->escape($username), $app->escape($side), $app->escape($playlistid), $app->escape($search), $app->escape($serial), $app->escape($currentpage), $app->escape($sort));
 
 
