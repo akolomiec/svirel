@@ -238,8 +238,14 @@ function init () {
     new_playlist_button.unbind('click');
     new_playlist_button.bind('click', function (event) {
         playlistname = prompt("Введите имя нового плейлиста", "Новый плейлист");
+        if (playlistname != '' && playlistname != null) {
+            newplaylist(playlistname);
+        } else {
+            if (playlistname == '' ) {
+                alert('Плейлист на может иметь пустое имя');
+            }
+        }
 
-        newplaylist(playlistname);
     });
 
     download_button = $(".save-sign");
@@ -462,11 +468,17 @@ function getpage(url ,page, num ,totalpages, side) {
 
 function Checkuser(responce) {
     req = $.parseJSON(responce);
-
+//todo Расписать нормально ошибки при регистрации
     if ( isNaN(req.id) ) {
-        if ( req.code == 1 ) $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
-        if ( req.code == 2 ) $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
-        if ( req.code == 3 ) $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
+        if ( req.code == 1 ) {
+            $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
+        }
+        if ( req.code == 2 ) {
+            $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
+        }
+        if ( req.code == 3 ) {
+            $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
+        }
     } else {
         return true;
     }
