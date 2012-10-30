@@ -119,6 +119,7 @@ function init () {
             }
         });
     });
+    var repeatoff_button;
     repeatoff_button = $('.repeat-off');
     repeatoff_button.unbind('click');
     repeatoff_button.bind('click', function () {
@@ -135,8 +136,21 @@ function init () {
             }
         });
     });
+    var download_btn;
+    download_btn = $('#download-btn-small');
+    download_btn.unbind('click');
+    download_btn.bind('click', function(){
+        var url;
+        url = $('#wrapper-for-main-player').attr('track-id');
+        if (typeof(url) != "undefined" || url == '') {
+            window.open("/getsong/"+url, '_blank');
+            $.stickr({note:' /getsong/' + url,className:'opacity',position:{right:0,top:0}});
+        } else {
+            $.stickr({note:' Нет файла для загрузки ' + url,className:'opacity',position:{right:0,top:0}});
+        }
+    });
 
-
+    var prev_button;
     prev_button = $('.jp-prev');
     prev_button.unbind('click');
     prev_button.bind('click', function () {
