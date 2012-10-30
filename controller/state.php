@@ -11,7 +11,6 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-
 $app->post('/state/save/', function (Request $request) use ($app) {
     $username = $request->get('username');
     $side = $request->get('side');
@@ -20,12 +19,8 @@ $app->post('/state/save/', function (Request $request) use ($app) {
     $serial = $request->get('serial');
     $currentpage = $request->get('currentpage');
     $sort = $request->get('sort');
-    State::save($app->escape($username), $app->escape($side), $app->escape($playlistid), $app->escape($search), $app->escape($serial), $app->escape($currentpage), $app->escape($sort));
-
-
-
+    State::save($app->escape($username), $app->escape($side), $app->escape($playlistid), $app->escape($search), $app->escape($serial), $app->escape($currentpage), '', '', $app->escape($sort));
 })->bind('state_save');
-
 
 $app->get('/repeat/{on}/', function (Request $request, $on) use ($app) {
     if ($on == "on") {
@@ -36,4 +31,11 @@ $app->get('/repeat/{on}/', function (Request $request, $on) use ($app) {
 
 })->bind('repeat');
 
+$app->get('/shuffle/{on}/', function (Request $request, $on) use ($app) {
+    if ($on == "on") {
+        State::shuffle_save(1);
+    } else {
+        State::shuffle_save('null');
+    }
+})->bind('shuffle');
 

@@ -141,10 +141,10 @@ input[type=text]:focus{
 .repeat-off{
 	background-image:url(../images/controls-light/jp-repeat-off.png);
 }
-.jp-shuffle{
+.shuffle{
 	background-image:url(../images/controls-light/jp-shuffle.png);
 }
-.jp-shuffle-off{
+.shuffle-off{
 	background-image:url(../images/controls-light/jp-shuffle-off.png);
 }
 .scan{

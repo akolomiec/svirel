@@ -23,13 +23,8 @@ $app->get('/vkauth', function (Request $request) use ($app) {
 	Log::write ("access_token = {$data['access_token']}",__LINE__);
         if($data['access_token']){
             // запишем данные в сессию
-//            $_SESSION['access_token'] = $data['access_token'];
-		//print_r($data);
 		Core::savetoken($data['access_token']);
-//            $_SESSION['user_id'] = $data['user_id'];
 		Core::saveuid($data['user_id']);
-            // переадресуем пользователя на нужную страницу
-            //todo убрать нах все лишнее
             return $app->redirect('/');
         }
     }

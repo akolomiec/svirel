@@ -96,13 +96,14 @@ function getside () {
 
 // Выставляем обработчик событий на элементы управления.
 function init () {
+    var track_button;
     track_button = $('.track');
     track_button.unbind('click');
     track_button.bind('click',function () {
         playsong($(this));
         state_save();
-        //$.stickr({note:'Play выполнен',className:'opacity',position:{right:0,top:0}});
     });
+    var repeat_button;
     repeat_button = $('.repeat');
     repeat_button.unbind('click');
     repeat_button.bind('click', function () {
@@ -115,7 +116,7 @@ function init () {
                     $('.repeat-off').css({'display' : 'block'});
             },
             error:  function(xhr, str){
-                $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+                $.stickr({note:'Возникла ошибка: '+str+xhr.responseCode,className:'opacity',position:{right:0,top:0}});
             }
         });
     });
@@ -136,6 +137,67 @@ function init () {
             }
         });
     });
+
+
+
+    var shuffle_button;
+    shuffle_button = $('.shuffle');
+    shuffle_button.unbind('click');
+    shuffle_button.bind('click', function () {
+        $.stickr({note:'Кнопка в перемешку зажата',className:'opacity',position:{right:0,top:0}});
+        $.ajax({
+            url:	 "/shuffle/on",
+            success: function(response, code){
+                $.stickr({note:' /shuffle/on выполнен',className:'opacity',position:{right:0,top:0}});
+                $('.shuffle').css({'display' : 'none'});
+                $('.shuffle-off').css({'display' : 'block'});
+            },
+            error:  function(xhr, str){
+                $.stickr({note:'Возникла ошибка: '+str+xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+            }
+        });
+    });
+    var shuffleoff_button;
+    shuffleoff_button = $('.shuffle-off');
+    shuffleoff_button.unbind('click');
+    shuffleoff_button.bind('click', function () {
+        $.stickr({note:'Кнопка в перемешку отпущена',className:'opacity',position:{right:0,top:0}});
+        $.ajax({
+            url:	 "/shuffle/off",
+            success: function(response, code){
+                $.stickr({note:' /shuffle/off выполнен',className:'opacity',position:{right:0,top:0}});
+                $('.shuffle-off').css({'display' : 'none'});
+                $('.shuffle').css({'display' : 'block'});
+            },
+            error:  function(xhr, str){
+                $.stickr({note:'Возникла ошибка: '+ str + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+            }
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     var download_btn;
     download_btn = $('#download-btn-small');
     download_btn.unbind('click');

@@ -317,14 +317,14 @@ body{
 .repeat:hover, .repeat-off:hover{
 	background-position:left bottom;
 }
-.jp-shuffle, .jp-shuffle-off{
+.shuffle, .shuffle-off{
 	height:20px;
 	width:20px;
 	float:left;
 	background-position:left top;
 	margin:0px 10px 0 0;
 }
-.jp-shuffle:hover, .jp-shuffle-off:hover{
+.shuffle:hover, .shuffle-off:hover{
 	background-position:left bottom;
 }
 .scan, .scan-off{

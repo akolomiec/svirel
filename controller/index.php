@@ -18,7 +18,8 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('index.twig', array(
         'title' => $title,
         'cookie_domain' => $GLOBALS['conf']['cookie_domain'],
-        'repeat' => State::repeat()
+        'repeat' => State::repeat(),
+        'shuffle' => State::shuffle()
     ));
 })->bind('homepage');
 

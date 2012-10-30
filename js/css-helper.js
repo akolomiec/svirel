@@ -7,7 +7,6 @@ $(function()
 			$('.track-selected').removeClass("track-selected");
 			$(this).addClass("track-selected");
 		});
-        $(".jp-shuffle-off").hide();
         $(".scan-off").hide();
         $('#top100').addClass("selected-categories");
 		//Подсвечивание градиентом дива с песней при нажатии

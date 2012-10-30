@@ -14,7 +14,7 @@ if (defined("AKPLAYER")) {
             $base->dbquery($sql);
         }
 
-        static function save($username, $side = 'left', $playlistid = '', $search = '', $serial = 1, $currentpage = 1, $repeat = '', $sort = '') {
+        static function save($username, $side = 'left', $playlistid = '', $search = '', $serial = 1, $currentpage = 1, $repeat = '', $shuffle = '', $sort = '') {
             global $app;
             $base = new DB;
             $sql = "UPDATE `state` SET";
@@ -24,6 +24,7 @@ if (defined("AKPLAYER")) {
             if (!empty($currentpage)) {$sql .= " `page`='{$currentpage}',";}
             if (!empty($playlistid)) {$sql .= " `playlistid`='{$playlistid}',";}
             if (!empty($repeat)) {$sql .= " `repeat`='{$repeat}',";}
+            if (!empty($repeat)) {$sql .= " `shuffle`='{$shuffle}',";}
             $sql = substr($sql, 0, -1);
             $sql = $sql. " WHERE `user_id` ='{$username}';";
             $app['monolog']->AddDebug(__FUNCTION__.' Сохраняем состояние ', array('sql'=>$sql));
@@ -91,6 +92,7 @@ if (defined("AKPLAYER")) {
                 }
             }
         }
+
         public static function maxtrack ($state) {
             global $app;
             if ($state['side'] == 'left'){
@@ -132,12 +134,35 @@ if (defined("AKPLAYER")) {
             }
 
         }
+
+        public static function shuffle() {
+            global $app;
+            $state = self::load();
+            $app['monolog']->AddDebug(__FUNCTION__.' Состояние кнопки в перемешку ', array('state'=>$state));
+            if ($state['shuffle'] == 1) {
+                return 1;
+            } else {
+                return false;
+            }
+
+        }
+
+
         public static function repeat_save($on) {
             global $app;
             $state = self::load();
             $app['monolog']->AddDebug(__FUNCTION__.' Состояние ', array('state'=>$state));
             $state['repeat'] = $app->escape($on);
             self::save($state['user_id'],$state['side'], $state['playlistid'], $state['search'],$state['serial'],$state['page'],$state['repeat'],$state['sort']);
+
+        }
+
+        public static function shuffle_save($on) {
+            global $app;
+            $state = self::load();
+            $app['monolog']->AddDebug(__FUNCTION__.' Состояние ', array('state'=>$state));
+            $state['shuffle'] = $app->escape($on);
+            self::save($state['user_id'],$state['side'], $state['playlistid'], $state['search'],$state['serial'],$state['page'],$state['repeat'], $state['shuffle'],$state['sort']);
 
         }
     }
