@@ -15,7 +15,11 @@ $app->get('/', function () use ($app) {
     $app['session']->set('req', '');
     $title = $GLOBALS['conf']['main_title'];
 
-    return $app['twig']->render('index.twig', array('title' => $title, 'cookie_domain' => $GLOBALS['conf']['cookie_domain']));
+    return $app['twig']->render('index.twig', array(
+        'title' => $title,
+        'cookie_domain' => $GLOBALS['conf']['cookie_domain'],
+        'repeat' => State::repeat()
+    ));
 })->bind('homepage');
 
 //todo Сделать нормальную проверку входных данных

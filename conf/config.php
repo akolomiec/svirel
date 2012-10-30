@@ -24,6 +24,7 @@ if (defined("AKPLAYER")) {
         'OAuthCallback' => 'vkauth',
         'VKScope' => 'audio',
         'trackperpage' => 20,
+        'maxtrack' => 1000,
         'uagent' =>  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.202 Safari/535.1",
         'cookies' => APPLICATION_PATH.DS.'log'.DS."cookie",
         'cookie_domain' => 'svirel.akmain.org'

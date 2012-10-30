@@ -22,7 +22,10 @@ class LastSearch {
     }
 
     public static function SetLastSearch ($uid, $string) {
+        global $app;
         $db = new DB;
+        $string = $app->escape($string);
         $sql = "INSERT INTO `lsearch` (`user_id`, `lastsearch`) VALUES ('{$uid}', '{$string}');";
+        $db->dbquery($sql);
     }
 }

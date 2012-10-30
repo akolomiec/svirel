@@ -135,10 +135,10 @@ input[type=text]:focus{
 .jp-volume-bar-value{
 	background-image:url(../images/controls-light/bg-jp-play-bar.png);
 }
-.jp-repeat{
+.repeat{
 	background-image:url(../images/controls-light/jp-repeat.png);
 }
-.jp-repeat-off{
+.repeat-off{
 	background-image:url(../images/controls-light/jp-repeat-off.png);
 }
 .jp-shuffle{

@@ -27,4 +27,13 @@ $app->post('/state/save/', function (Request $request) use ($app) {
 })->bind('state_save');
 
 
+$app->get('/repeat/{on}/', function (Request $request, $on) use ($app) {
+    if ($on == "on") {
+        State::repeat_save(1);
+    } else {
+        State::repeat_save('null');
+    }
+
+})->bind('repeat');
+
 

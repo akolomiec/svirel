@@ -68,8 +68,8 @@
                                 <div class="border-radius-top-right"></div>
                                 <div class="jp-volume-bar-value"></div>
                             </div>
-                            <div class="jp-repeat" title="повтор"></div>
-                            <div class="jp-repeat-off" title="повтор"></div>
+                            <div class="repeat" title="повтор" {% if repeat == 1 %}style="display:none;"{% else %}style="display:block;" {% endif %}></div>
+                            <div class="repeat-off" title="повтор" {% if repeat == 1 %}style="display:block;"{% else %}style="display:none;" {% endif %}></div>
                             <div class="jp-shuffle" title="случайный"></div>
                             <div class="jp-shuffle-off" title="случайный"></div>
                             <div class="scan" title="Играет по 10 секунд от каждой песни (Режим ознакомления)"></div>

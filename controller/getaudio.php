@@ -39,7 +39,16 @@ $app->get('/getprevtrack/', function () use ($app) {
 });
 $app->get('/getnexttrack/', function () use ($app) {
     $state = State::load();
+
     $serial = $state['serial'] + 1;
+    if($serial > State::maxtrack($state)) {
+        if (State::repeat()){
+            $serial = 1;
+            $app['monolog']->addInfo('Выбираем песню', array('serial' => $serial));
+        } else return false;
+
+
+    }
     if ($serial > 0) {
         $filename = State::GetSongbySerial($serial);
         if (!empty($filename)) {
@@ -48,6 +57,7 @@ $app->get('/getnexttrack/', function () use ($app) {
             $data = json_decode($resp, true);
             $data = $data['response'];
             State::save($state['user_id'], $state['side'], $state['playlistid'], $state['search'], $serial, $state['currentpage'], $state['sort']);
+            //todo проверка на пустой ответ
             return json_encode(array('filename' => $filename, 'artist' => $data[0]['artist'], 'trak' => $data[0]['title']));
         } else {
             return false;

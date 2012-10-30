@@ -136,28 +136,45 @@ class CUser
     public static function DeleteUser ($uid)  {
         global $app;
         $base = new DB;
-        $sql = "DELETE FROM `user_playlist` WHERE `user_id` = {$uid};";
-        $base->dbquery($sql);
+        //$sql = "DELETE FROM `user_playlist` WHERE `user_id` = {$uid};";
+        //$base->dbquery($sql);
         $sql = "DELETE FROM `user` WHERE `id` = {$uid};";
         $base->dbquery($sql);
     }
 
     public static function createUser($login, $pass, $active = 1, $role = 1, $defpl_id = null) {
+        global $app;
+        //$app['monolog']->AddDebug(__FUNCTION__.' Создаем пользователя ', array('login'=>$login, 'pass'=>$pass, 'active'=>$active, 'role'=>$role, 'defpl_id'=>$defpl_id));
         if (self::checkLogin($login)) {
+            //$app['monolog']->AddDebug(__FUNCTION__.' Такой пользователь найден в базе ', array('login'=>$login));
             $userid = self::getId($login);
+            //$app['monolog']->AddDebug(__FUNCTION__.' Его ID ', array('ID'=>$userid));
             return $userid;
         } else {
+            //$app['monolog']->AddDebug(__FUNCTION__.' Пользователь в базе не был найден продолжаем создавать ', array('login'=>$login));
             if (self::isValidLogin($login) && self::isValidPass($pass)) {
+                //$app['monolog']->AddDebug(__FUNCTION__.' Проверили login и pass на валидность ', array('login'=>$login, 'pass' => $pass));
                 $base = new DB;
                 $pass = md5($pass);
                 $sql = "INSERT INTO `user` (`role_id`, `login`, `pass`, `active`, `defpl`) VALUES ('{$role}', '{$login}', '{$pass}', '{$active}', '{$defpl_id}');";
+                //$app['monolog']->AddDebug(__FUNCTION__.' Запрос к базе ', array('sql'=>$sql));
                 $base->dbquery($sql);
                 $rows = mysql_affected_rows($base->db);
                 $id = mysql_insert_id($base->db);
+                //$app['monolog']->AddDebug(__FUNCTION__.' Запрос выполнен ', array('rows'=>$rows, 'id'=> $id));
                 if ($rows) {
+                    //$app['monolog']->AddDebug(__FUNCTION__.' Количество рядов отличается от нуля ', array('rows'=>$rows));
                     if (empty($defpl_id)) {
-                        Plist::CreatePlaylist($id, true);
+                        //$app['monolog']->AddDebug(__FUNCTION__.' Значение плейлиста по умолчанию, будем создавать новый плейлист ', array('defpl_id'=>$defpl_id));
+                        if ($defpl_id = Plist::CreatePlaylist($id, true)){
+                            //$app['monolog']->AddDebug(__FUNCTION__.' Создан новый плейлист ', array('defpl_id'=>$defpl_id));
+                        }
                     }
+                    $sql = "UPDATE `user_playlist` SET user_id = {$id} WHERE id = {$defpl_id};";
+                    //$app['monolog']->AddDebug(__FUNCTION__.' Готовим запрос  ', array('sql'=>$sql));
+                    $base->dbquery($sql);
+                    $rows = mysql_affected_rows($base->db);
+                    //$app['monolog']->AddDebug(__FUNCTION__.' Запрос выполнен ', array('rows'=>$rows));
                     State::createstate($id);
                     return $id;
                 } else {

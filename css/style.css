@@ -307,14 +307,14 @@ body{
 	height:6px;
 	width:50%;/*Изменяемый параментр*/
 }
-.jp-repeat, .jp-repeat-off{
+.repeat, .repeat-off{
 	height:20px;
 	width:20px;
 	float:left;
 	background-position:left top;
 	margin:0px 10px 0 0;
 }
-.jp-repeat:hover, .jp-repeat-off:hover{
+.repeat:hover, .repeat-off:hover{
 	background-position:left bottom;
 }
 .jp-shuffle, .jp-shuffle-off{

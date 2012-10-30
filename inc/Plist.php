@@ -149,19 +149,29 @@ class Plist
     }
 
     public static function CreatePlaylist ($id, $defpl = false, $name = "Мой плейлист" ) {
+        global $app;
+        $app['monolog']->AddDebug(__FUNCTION__.' Cоздавать новый плейлист ', array('id'=>$id, 'defpl'=>$defpl, 'name'=>$name));
         $db = new DB;
         $sql = "INSERT INTO `user_playlist` (`user_id`, `plname`) VALUES ( {$id}, \"{$name}\" );";
+        $app['monolog']->AddDebug(__FUNCTION__.' Готовим запрос  ', array('sql'=>$sql));
         $db->dbquery($sql);
         $rows = mysql_affected_rows($db->db);
         $playlist_id = mysql_insert_id($db->db);
+        $app['monolog']->AddDebug(__FUNCTION__.' Запрос выполнен ', array('rows'=>$rows, 'playlist_id'=>$playlist_id));
         if ($rows) {
+            $app['monolog']->AddDebug(__FUNCTION__.' Rows != 0 ', array('rows'=>$rows));
             if ($defpl) {
+                $app['monolog']->AddDebug(__FUNCTION__.' Выбран плейлист по умолчанию ', array('defpl'=>$defpl));
                 $sql = "UPDATE `user` SET defpl = {$playlist_id} WHERE id = {$id};";
+                $app['monolog']->AddDebug(__FUNCTION__.' Готовим запрос  ', array('sql'=>$sql));
                 $db->dbquery($sql);
+                $rows = mysql_affected_rows($db->db);
+                $app['monolog']->AddDebug(__FUNCTION__.' Запрос выполнен ', array('rows'=>$rows));
             }
             return $playlist_id;
         } else {
             return false;
         }
     }
+
 }
