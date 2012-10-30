@@ -153,7 +153,7 @@ if (defined("AKPLAYER")) {
             $state = self::load();
             $app['monolog']->AddDebug(__FUNCTION__.' Состояние ', array('state'=>$state));
             $state['repeat'] = $app->escape($on);
-            self::save($state['user_id'],$state['side'], $state['playlistid'], $state['search'],$state['serial'],$state['page'],$state['repeat'],$state['sort']);
+            self::save($state['user_id'],$state['side'], $state['playlistid'], $state['search'],$state['serial'],$state['page'],$state['repeat'], $state['shuffle'],$state['sort']);
 
         }
 

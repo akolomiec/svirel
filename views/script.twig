@@ -59,6 +59,7 @@ function init_jplayer () {
             if (shuffle()) {
                 getrandomtrack();
                 $(".track.track-selected").removeClass("track-selected");
+                set_selection();
                 state_save();
             } else {
                 if (typeof(track) == "undefined") {
@@ -71,6 +72,33 @@ function init_jplayer () {
             }
         }
     });
+}
+function set_selection(){
+    $.stickr({note:'Отправляем запрос выделенного трека на сервер',className:'opacity',position:{right:0,top:0}});
+    $.getJSON("/getstate/",function(data){
+
+            var playlistid = $(".pl").attr("id");
+                var q = $('input[name="search-input"]').val();
+
+            if (data[1] == getside()) {
+                if (data[1] == "right" && data[6] == playlistid) {
+                    $('.pl > .track[serial='+data[2]+']').addClass("track-selected");
+                } else{
+                    if (data[1] == "left") {
+                        if (data[6] == "search" && data[3] == q){
+                            $('#leftblock > .track[serial='+data[2]+']').addClass("track-selected");
+                        }else{
+                            if (data[6] == "top100"){
+                                $('#leftblock > .track[serial='+data[2]+']').addClass("track-selected");
+                            }
+                        }
+                    }
+                }
+
+            }
+            $.stickr({note:' /getstate/ выполнен',className:'opacity',position:{right:0,top:0}});
+        }
+    );
 }
 
 function shuffle() {
@@ -194,30 +222,18 @@ function init () {
             var cur_page = '';
             var url = '';
             var page_total = '';
-            if (side == 'left'){
-                cur_page = pageleft.inputData.pageCurrent;
-                url = pageleft.inputData.baseUrl;
-                page_total = pageleft.inputData.pagesTotal;
-            } else {
-                cur_page = pagecenter.inputData.pageCurrent;
-                url = pagecenter.inputData.baseUrl;
-                page_total = pagecenter.inputData.pagesTotal;
-            }
-            if (typeof(track) == "undefined") {
-                // todo Выбрать из базы состояние плеера и проверить serial = 1 ? если да то ничего не делаем, если нет то сериал = сериал -1.заставляем плеер петь точто нам надо.
-
-                getprevtrack();
+            if (shuffle()) {
+                getrandomtrack();
                 $(".track.track-selected").removeClass("track-selected");
-                /*if (cur_page == 1){
-                 $.stickr({note:'Текущая страница первая',className:'opacity',position:{right:0,top:0}});
-                 plnow = $(".track-selected");
-                 playsong(plnow);
-                 } else {
-                 getpage(url, (cur_page - 1),"last", page_total, side);
-                 $.stickr({note:'Сменили страницу на '+(cur_page-1),className:'opacity',position:{right:0,top:0}});
-                 }*/
-            }else {
-                playsong(plnow);
+                set_selection();
+                state_save();
+            } else {
+                if (typeof(track) == "undefined") {
+                    getprevtrack();
+                    $(".track.track-selected").removeClass("track-selected");
+                }else {
+                    playsong(plnow);
+                }
             }
             $.stickr({note:'jp-prev выполнен',className:'opacity',position:{right:0,top:0}});
         } else {
@@ -236,28 +252,20 @@ function init () {
         var cur_page = '';
         var url = '';
         var page_total = '';
-        if (side == 'left'){
-            cur_page = pageleft.inputData.pageCurrent;
-            url = pageleft.inputData.baseUrl;
-            page_total = pageleft.inputData.pagesTotal;
-        } else {
-            cur_page = pagecenter.inputData.pageCurrent;
-            url = pagecenter.inputData.baseUrl;
-            page_total = pagecenter.inputData.pagesTotal;
-        }
-        if (typeof track == "undefined") {
-            getnexttrack();
+
+        if (shuffle()) {
+            getrandomtrack();
             $(".track.track-selected").removeClass("track-selected");
-            //if (page_total > cur_page){
-            //var page = (cur_page-0)+1;
-            //getpage(url, page, null , page_total, side);
-            //} else {
-            //if ($(".jp-repeat").css("display") == "none") { // Если включен повтор
-            //getpage(url, 1, null , page_total, side);
-            // }
-            //    }
-        }else {
-            playsong(plnow);
+            set_selection();
+            state_save();
+        } else {
+            if (typeof track == "undefined") {
+                getnexttrack();
+                $(".track.track-selected").removeClass("track-selected");
+
+            }else {
+                playsong(plnow);
+            }
         }
         $.stickr({note:'jp-next выполнен',className:'opacity',position:{right:0,top:0}});
     });

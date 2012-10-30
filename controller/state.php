@@ -35,7 +35,15 @@ $app->get('/shuffle/{on}/', function (Request $request, $on) use ($app) {
     if ($on == "on") {
         State::shuffle_save(1);
     } else {
-        State::shuffle_save('null');
+        State::shuffle_save(0);
     }
 })->bind('shuffle');
 
+
+$app->get('/getstate/', function (Request $request) use ($app) {
+    $state = State::load();
+    foreach ($state as $key => $value ){
+        $result[] = $value;
+    }
+    return $app->json($result, 200);
+})->bind('getstate');
