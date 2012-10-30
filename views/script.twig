@@ -56,37 +56,30 @@ function init_jplayer () {
             var pltrack="";
             var plnow = $(".track-selected + .track");
             var track = plnow.attr("track-id");
-            //var par = $(".track-selected.track").parent();
-            var side = getside();
-            var cur_page = '';
-            var url = '';
-            var page_total = '';
-            if (side == 'left'){
-                if (typeof(pageleft) != "undefined"){
-                    cur_page = pageleft.inputData.pageCurrent;
-                    url = pageleft.inputData.baseUrl;
-                    page_total = pageleft.inputData.pagesTotal;
-                }
-            } else {
-                if (typeof(pagecenter) != "undefined"){
-                    cur_page = pagecenter.inputData.pageCurrent;
-                    url = pagecenter.inputData.baseUrl;
-                    page_total = pagecenter.inputData.pagesTotal;
-                }
-            }
-            var page;
-            if (typeof(track) == "undefined") {
-                getnexttrack();
+            if (shuffle()) {
+                getrandomtrack();
                 $(".track.track-selected").removeClass("track-selected");
-            } else {
-                playsong(plnow);
                 state_save();
+            } else {
+                if (typeof(track) == "undefined") {
+                    getnexttrack();
+                    $(".track.track-selected").removeClass("track-selected");
+                } else {
+                    playsong(plnow);
+                    state_save();
+                }
             }
         }
     });
 }
 
-
+function shuffle() {
+    if ($(".shuffle").css("display") == "none") {
+        return true;
+    } else {
+        return false;
+    }
+}
 // Определяем панель плеера на которой играет трек
 function getside () {
     player_track = $("#wrapper-for-main-player");
@@ -391,6 +384,24 @@ function getnexttrack () {
         }
     });
 }
+
+function getrandomtrack() {
+    $.stickr({note:'Отправляем запрос случайного трека на сервер',className:'opacity',position:{right:0,top:0}});
+    $.ajax({
+        url:	 "/getrandomtrack/",
+        success: function(response, code){
+            var result = $.parseJSON(response);
+            if (result) {
+                playtrack(result['filename'], result['artist'], result['trak']);
+            }
+            $.stickr({note:' /getrandomtrack/ выполнен',className:'opacity',position:{right:0,top:0}});
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        }
+    });
+}
+
 
 function playtrack (filename, artist, trak, save) {
     if (typeof (filename) != 'undefined'){
