@@ -49,24 +49,20 @@ function init_jplayer () {
         },
         supplied: "mp3, wma",
         ended: function () {
-            //todo проверить что должны играть в данный момент.
-            $.stickr({note:'Песня закончилась',className:'opacity',position:{right:0,top:0}});
             $(".jp-seek-bar").css("width","0%");
 
-            var pltrack="";
-            var plnow = $(".track-selected + .track");
-            var track = plnow.attr("track-id");
             if (shuffle()) {
                 getrandomtrack();
                 $(".track.track-selected").removeClass("track-selected");
                 set_selection();
                 state_save();
             } else {
-                if (typeof(track) == "undefined") {
+                var plnow = $('#wrapper-for-main-player');
+                if (typeof(plnow.attr("track-id")) == "undefined") {
                     getnexttrack();
                     $(".track.track-selected").removeClass("track-selected");
                 } else {
-                    playsong(plnow);
+                    playsong($(".track-selected + .track"));
                     state_save();
                 }
             }
@@ -74,29 +70,20 @@ function init_jplayer () {
     });
 }
 function set_selection(){
-    $.stickr({note:'Отправляем запрос выделенного трека на сервер',className:'opacity',position:{right:0,top:0}});
     $.getJSON("/getstate/",function(data){
-
-            var playlistid = $(".pl").attr("id");
-                var q = $('input[name="search-input"]').val();
-
-            if (data[1] == getside()) {
-                if (data[1] == "right" && data[6] == playlistid) {
-                    $('.pl > .track[serial='+data[2]+']').addClass("track-selected");
-                } else{
-                    if (data[1] == "left") {
-                        if (data[6] == "search" && data[3] == q){
-                            $('#leftblock > .track[serial='+data[2]+']').addClass("track-selected");
-                        }else{
-                            if (data[6] == "top100"){
-                                $('#leftblock > .track[serial='+data[2]+']').addClass("track-selected");
-                            }
-                        }
+        if (data[1] == "right" && data[6] == $(".pl").attr("id")) {
+            $('.pl > .track[serial='+data[2]+']').addClass("track-selected");
+        } else{
+            if (data[1] == "left") {
+                if (data[6] == "search" && data[3] == $('input[name="search-input"]').val()){
+                    $('#leftblock > .track[serial='+data[2]+']').addClass("track-selected");
+                }else{
+                    if (data[6] == "top100"){
+                        $('#leftblock > .track[serial='+data[2]+']').addClass("track-selected");
                     }
                 }
-
             }
-            $.stickr({note:' /getstate/ выполнен',className:'opacity',position:{right:0,top:0}});
+        }
         }
     );
 }
@@ -108,24 +95,21 @@ function shuffle() {
         return false;
     }
 }
-// Определяем панель плеера на которой играет трек
 function getside () {
-    player_track = $("#wrapper-for-main-player");
-    return $(player_track).attr('side');
+    var playing_track = $("#wrapper-for-main-player");
+    return $(playing_track).attr('side');
 }
 
 
 // Выставляем обработчик событий на элементы управления.
 function init () {
-    var track_button;
-    track_button = $('.track');
+    var track_button = $('.track');
     track_button.unbind('click');
     track_button.bind('click',function () {
         playsong($(this));
         state_save();
     });
-    var repeat_button;
-    repeat_button = $('.repeat');
+    var repeat_button = $('.repeat');
     repeat_button.unbind('click');
     repeat_button.bind('click', function () {
         $.stickr({note:'Кнопка повтор зажата',className:'opacity',position:{right:0,top:0}});
@@ -141,8 +125,7 @@ function init () {
             }
         });
     });
-    var repeatoff_button;
-    repeatoff_button = $('.repeat-off');
+    var repeatoff_button = $('.repeat-off');
     repeatoff_button.unbind('click');
     repeatoff_button.bind('click', function () {
         $.stickr({note:'Кнопка повтор отпущена',className:'opacity',position:{right:0,top:0}});
@@ -159,8 +142,7 @@ function init () {
         });
     });
 
-    var shuffle_button;
-    shuffle_button = $('.shuffle');
+    var shuffle_button = $('.shuffle');
     shuffle_button.unbind('click');
     shuffle_button.bind('click', function () {
         $.stickr({note:'Кнопка в перемешку зажата',className:'opacity',position:{right:0,top:0}});
@@ -177,8 +159,7 @@ function init () {
         });
     });
 
-    var shuffleoff_button;
-    shuffleoff_button = $('.shuffle-off');
+    var shuffleoff_button = $('.shuffle-off');
     shuffleoff_button.unbind('click');
     shuffleoff_button.bind('click', function () {
         $.stickr({note:'Кнопка в перемешку отпущена',className:'opacity',position:{right:0,top:0}});
@@ -195,8 +176,7 @@ function init () {
         });
     });
 
-    var download_btn;
-    download_btn = $('#download-btn-small');
+    var download_btn = $('#download-btn-small');
     download_btn.unbind('click');
     download_btn.bind('click', function(){
         var url;
@@ -209,25 +189,19 @@ function init () {
         }
     });
 
-    var prev_button;
-    prev_button = $('.jp-prev');
+    var prev_button = $('.jp-prev');
     prev_button.unbind('click');
     prev_button.bind('click', function () {
         //Если первый трек в списке, то вообще ничего делать не будем.
         if ($(".track-selected").attr("serial") != 1) {
-            var plnow = $(".track-selected").prev(".track");
-            var track = $(plnow).attr("track-id");
-            //var par = $(".track-selected").parent();
-            var side = getside();
-            var cur_page = '';
-            var url = '';
-            var page_total = '';
             if (shuffle()) {
                 getrandomtrack();
                 $(".track.track-selected").removeClass("track-selected");
                 set_selection();
                 state_save();
             } else {
+                var plnow = $(".track-selected").prev(".track");
+                var track = $(plnow).attr("track-id");
                 if (typeof(track) == "undefined") {
                     getprevtrack();
                     $(".track.track-selected").removeClass("track-selected");
@@ -235,41 +209,33 @@ function init () {
                     playsong(plnow);
                 }
             }
-            $.stickr({note:'jp-prev выполнен',className:'opacity',position:{right:0,top:0}});
         } else {
-            $.stickr({note:'jp-prev выполнен это первый трек в списке',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'jp-prev выполнен это первый трек в списке',className:'opacity',position:{right:0,top:0}});
         }
 
     });
-    next_button = $('.jp-next');
+    var next_button = $('.jp-next');
     next_button.unbind('click');
     next_button.bind ('click',function () {
-        var trsel = $(".track-selected");
-        var plnow = trsel.next(".track");
-        var track = $(plnow).attr("track-id");
-        var par = trsel.parent();
-        var side = getside();
-        var cur_page = '';
-        var url = '';
-        var page_total = '';
-
         if (shuffle()) {
             getrandomtrack();
             $(".track.track-selected").removeClass("track-selected");
             set_selection();
             state_save();
         } else {
+            var track = $(".track-selected").next(".track").attr("track-id");
+            var plnow = $(".track-selected").next(".track");
             if (typeof track == "undefined") {
                 getnexttrack();
                 $(".track.track-selected").removeClass("track-selected");
-
             }else {
                 playsong(plnow);
             }
         }
-        $.stickr({note:'jp-next выполнен',className:'opacity',position:{right:0,top:0}});
+        //$.stickr({note:'jp-next выполнен',className:'opacity',position:{right:0,top:0}});
     });
-    search_button = $('#search-in-vk');
+
+    var search_button = $('#search-in-vk');
     search_button.unbind('click');
     search_button.bind('click',function () {
         search();
@@ -282,39 +248,38 @@ function init () {
     $('h1').gradientText({
         colors: ['#50AADC', '#640064']
     });
-    top100_button = $("#top100");
+    var top100_button = $("#top100");
     top100_button.unbind('click');
     top100_button.bind('click', function (){
         drawleft();
     });
-    logout_button = $("#go-out");
+    var logout_button = $("#go-out");
     logout_button.unbind('click');
     logout_button.bind('click', function () {
         logout();
     });
-    add_in_playlist_button = $(".add-in-playlist-sign");
+    var add_in_playlist_button = $(".add-in-playlist-sign");
     add_in_playlist_button.unbind('click');
     add_in_playlist_button.bind('click', function (event) {
         event.preventDefault();
         event.stopPropagation();
         addinplaylist($(this).parent());
     });
-    delete_from_playlist_button = $(".delete-sign");
+    var delete_from_playlist_button = $(".delete-sign");
     delete_from_playlist_button.unbind('click');
     delete_from_playlist_button.bind('click', function (event) {
         event.preventDefault();
         event.stopPropagation();
         delfromplaylist($(this).parent());
     });
-    playlist_menu_item = $(".my-playlist");
+    var playlist_menu_item = $(".my-playlist");
     playlist_menu_item.unbind('click');
     playlist_menu_item.bind('click', function (event) {
         event.preventDefault();
         event.stopPropagation();
         drawcenter($(this).attr("id"));
     });
-
-    new_playlist_button = $("#btn-new-playlist");
+    var new_playlist_button = $("#btn-new-playlist");
     new_playlist_button.unbind('click');
     new_playlist_button.bind('click', function (event) {
         playlistname = prompt("Введите имя нового плейлиста", "Новый плейлист");
@@ -325,51 +290,47 @@ function init () {
                 alert('Плейлист на может иметь пустое имя');
             }
         }
-
     });
 
-    download_button = $(".save-sign");
+    var download_button = $(".save-sign");
     download_button.unbind('click');
     download_button.bind('click', function (event) {
         event.stopPropagation();
     });
 
-    last_search_menu_item = $("#div-last-search").find("p");
+    var last_search_menu_item = $("#div-last-search").find("p");
     last_search_menu_item.unbind('click');
     last_search_menu_item.bind('click', function (event) {
         event.stopPropagation();
         $("#search-input").val($(this).text());
-        $.stickr({note:'search = '+$(this).text(),className:'opacity',position:{right:0,top:0}});
+        //$.stickr({note:'search = '+$(this).text(),className:'opacity',position:{right:0,top:0}});
         search();
 
     });
 
-    delete_playlist_button = $("#btn-del-playlist");
+    var delete_playlist_button = $("#btn-del-playlist");
     delete_playlist_button.unbind('click');
-    delete_playlist_button.bind('click', function (event) {
-        var playlistid = $(".pl").attr("id");
-        delplaylist(playlistid);
+    delete_playlist_button.bind('click', function () {
+        delplaylist($(".pl").attr("id"));
     });
 
-    delete_playlist_button2 = $(".del-playlist-item");
+    var delete_playlist_button2 = $(".del-playlist-item");
     delete_playlist_button2.unbind('click');
-    delete_playlist_button2.bind('click', function (event) {
-        var playlistid = $(".pl").attr("id");
-        delplaylist(playlistid);
+    delete_playlist_button2.bind('click', function () {
+        delplaylist($(".pl").attr("id"));
     });
 }
 
 function getprevtrack () {
-    $.stickr({note:'Отправляем запрос предыдущего трека на сервер',className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Отправляем запрос предыдущего трека на сервер',className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/getprevtrack/",
         success: function(response, code){
             var result = $.parseJSON(response);
-            //$.stickr({note:'/getprevtrack/: ' + result,className:'opacity',position:{right:0,top:0}});
             if (result) {
                 playtrack(result['filename'], result['artist'], result['trak']);
             }
-            $.stickr({note:' /getprevtrack/ выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:' /getprevtrack/ выполнен',className:'opacity',position:{right:0,top:0}});
         },
         error:  function(xhr, str){
             $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
@@ -377,7 +338,7 @@ function getprevtrack () {
     });
 }
 function getnexttrack () {
-    $.stickr({note:'Отправляем запрос следующего трека на сервер',className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Отправляем запрос следующего трека на сервер',className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/getnexttrack/",
         success: function(response, code){
@@ -385,7 +346,7 @@ function getnexttrack () {
             if (result) {
                 playtrack(result['filename'], result['artist'], result['trak']);
             }
-            $.stickr({note:' /getnexttrack/ выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:' /getnexttrack/ выполнен',className:'opacity',position:{right:0,top:0}});
         },
         error:  function(xhr, str){
             $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
@@ -394,7 +355,7 @@ function getnexttrack () {
 }
 
 function getrandomtrack() {
-    $.stickr({note:'Отправляем запрос случайного трека на сервер',className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Отправляем запрос случайного трека на сервер',className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/getrandomtrack/",
         success: function(response, code){
@@ -402,7 +363,7 @@ function getrandomtrack() {
             if (result) {
                 playtrack(result['filename'], result['artist'], result['trak']);
             }
-            $.stickr({note:' /getrandomtrack/ выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:' /getrandomtrack/ выполнен',className:'opacity',position:{right:0,top:0}});
         },
         error:  function(xhr, str){
             $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});

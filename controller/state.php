@@ -35,7 +35,7 @@ $app->get('/shuffle/{on}/', function (Request $request, $on) use ($app) {
     if ($on == "on") {
         State::shuffle_save(1);
     } else {
-        State::shuffle_save(0);
+        State::shuffle_save('null');
     }
 })->bind('shuffle');
 

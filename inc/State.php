@@ -24,7 +24,7 @@ if (defined("AKPLAYER")) {
             if (!empty($currentpage)) {$sql .= " `page`='{$currentpage}',";}
             if (!empty($playlistid)) {$sql .= " `playlistid`='{$playlistid}',";}
             if (!empty($repeat)) {$sql .= " `repeat`='{$repeat}',";}
-            if (!empty($repeat)) {$sql .= " `shuffle`='{$shuffle}',";}
+            if (!empty($shuffle)) {$sql .= " `shuffle`='{$shuffle}',";}
             $sql = substr($sql, 0, -1);
             $sql = $sql. " WHERE `user_id` ='{$username}';";
             $app['monolog']->AddDebug(__FUNCTION__.' Сохраняем состояние ', array('sql'=>$sql));
@@ -162,6 +162,7 @@ if (defined("AKPLAYER")) {
             $state = self::load();
             $app['monolog']->AddDebug(__FUNCTION__.' Состояние ', array('state'=>$state));
             $state['shuffle'] = $app->escape($on);
+            $app['monolog']->AddDebug(__FUNCTION__.' ON =  ', array('on'=>$state['shuffle']));
             self::save($state['user_id'],$state['side'], $state['playlistid'], $state['search'],$state['serial'],$state['page'],$state['repeat'], $state['shuffle'],$state['sort']);
 
         }

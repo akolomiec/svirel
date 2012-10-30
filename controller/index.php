@@ -14,12 +14,15 @@ $app->get('/', function () use ($app) {
     $app['monolog']->addInfo('Контроллер /');
     $app['session']->set('req', '');
     $title = $GLOBALS['conf']['main_title'];
-
+    $state = State::load();
     return $app['twig']->render('index.twig', array(
         'title' => $title,
         'cookie_domain' => $GLOBALS['conf']['cookie_domain'],
         'repeat' => State::repeat(),
         'shuffle' => State::shuffle()
+
+
+
     ));
 })->bind('homepage');
 
