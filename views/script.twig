@@ -308,8 +308,22 @@ function init () {
     addpllist_button.bind('click', function () {
         addplayinginplaylist();
     });
+
+    var addall_button = $("#addalltrack");
+    addall_button.unbind('click');
+    addall_button.bind('click', function () {
+        addall();
+    });
+
 }
 
+
+function addall(){
+    $('#leftblock > .track').each(function () {
+
+        addinplaylist($(this).attr('track-id'));
+    });
+}
 
 function addplayinginplaylist () {
     var trackid = $('#wrapper-for-main-player').attr('track-id');
@@ -643,7 +657,11 @@ function drawright(){
 
 
 function addinplaylist (track) {
-    var trackid = $(track).attr('track-id');
+    if (typeof(track) == "undefined" ) {
+        var trackid = $(track).attr('track-id');
+    } else {
+        trackid = track;
+    }
     var playlistid = $(".pl").attr("id");
     $.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
     $.ajax({
