@@ -304,8 +304,8 @@ function init () {
         delplaylist($(".pl").attr("id"));
     });
     var addpllist_button = $("#favourite-btn-small");
-    delete_playlist_button2.unbind('click');
-    delete_playlist_button2.bind('click', function () {
+    addpllist_button.unbind('click');
+    addpllist_button.bind('click', function () {
         addplayinginplaylist();
     });
 }
