@@ -53,34 +53,34 @@ function init_jplayer () {
 
             if (shuffle()) {
                 getrandomtrack();
-                $(".track.track-selected").removeClass("track-selected");
                 set_selection();
-                state_save();
             } else {
-                var plnow = $('#wrapper-for-main-player');
-                if (typeof(plnow.attr("track-id")) == "undefined") {
-                    getnexttrack();
-                    $(".track.track-selected").removeClass("track-selected");
-                } else {
-                    playsong($(".track-selected + .track"));
-                    state_save();
-                }
+                getnexttrack();
+                set_selection();
             }
         }
     });
 }
 function set_selection(){
+
     $.getJSON("/getstate/",function(data){
+                $(".track.track-selected").removeClass("track-selected");
+                var playing_track = $("#wrapper-for-main-player");
+                playing_track.attr('track-id', data[9]);
+                playing_track.attr('artist', $(".jp-name-artist").text());
+                playing_track.attr('trak', $(".jp-name-song").text());
+                playing_track.attr('side', data[1]);
+                playing_track.attr('playlistid', data[6]);
+                playing_track.attr('serial', data[2]);
+                playing_track.attr('search', data[3]);
         if (data[1] == "right" && data[6] == $(".pl").attr("id")) {
             $('.pl > .track[serial='+data[2]+']').addClass("track-selected");
         } else{
-            if (data[1] == "left") {
-                if (data[6] == "search" && data[3] == $('input[name="search-input"]').val()){
+            if (data[1] == "left" && data[6] == $('leftblock').attr('lbid')) {
+                if (data[3] == $('input[name="search-input"]').val()){
                     $('#leftblock > .track[serial='+data[2]+']').addClass("track-selected");
                 }else{
-                    if (data[6] == "top100"){
-                        $('#leftblock > .track[serial='+data[2]+']').addClass("track-selected");
-                    }
+                    $('#leftblock > .track[serial='+data[2]+']').addClass("track-selected");
                 }
             }
         }
@@ -196,18 +196,10 @@ function init () {
         if ($(".track-selected").attr("serial") != 1) {
             if (shuffle()) {
                 getrandomtrack();
-                $(".track.track-selected").removeClass("track-selected");
                 set_selection();
-                state_save();
             } else {
-                var plnow = $(".track-selected").prev(".track");
-                var track = $(plnow).attr("track-id");
-                if (typeof(track) == "undefined") {
-                    getprevtrack();
-                    $(".track.track-selected").removeClass("track-selected");
-                }else {
-                    playsong(plnow);
-                }
+                getprevtrack();
+                set_selection();
             }
         } else {
             //$.stickr({note:'jp-prev выполнен это первый трек в списке',className:'opacity',position:{right:0,top:0}});
@@ -219,18 +211,10 @@ function init () {
     next_button.bind ('click',function () {
         if (shuffle()) {
             getrandomtrack();
-            $(".track.track-selected").removeClass("track-selected");
             set_selection();
-            state_save();
         } else {
-            var track = $(".track-selected").next(".track").attr("track-id");
-            var plnow = $(".track-selected").next(".track");
-            if (typeof track == "undefined") {
-                getnexttrack();
-                $(".track.track-selected").removeClass("track-selected");
-            }else {
-                playsong(plnow);
-            }
+            getnexttrack();
+            set_selection();
         }
         //$.stickr({note:'jp-next выполнен',className:'opacity',position:{right:0,top:0}});
     });
@@ -319,7 +303,37 @@ function init () {
     delete_playlist_button2.bind('click', function () {
         delplaylist($(".pl").attr("id"));
     });
+    var addpllist_button = $("#favourite-btn-small");
+    delete_playlist_button2.unbind('click');
+    delete_playlist_button2.bind('click', function () {
+        addplayinginplaylist();
+    });
 }
+
+
+function addplayinginplaylist () {
+    var trackid = $('#wrapper-for-main-player').attr('track-id');
+    var playlistid = $(".pl").attr("id");
+    if (typeof(trackid) != "undefined") {
+        $.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+        $.ajax({
+            url:	 "/addinplaylist/",
+            type:	 'POST',
+            data: { trackid: trackid , playlistid: playlistid },
+            success: function(response, code){
+                $.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
+                drawcenter(playlistid);
+            },
+            error:  function(xhr, str){
+                $.stickr({note:'Возникла ошибка при запросе drawcenter: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+            },
+            complete: function () {
+                init();
+            }
+        });
+    }
+}
+
 
 function getprevtrack () {
     //$.stickr({note:'Отправляем запрос предыдущего трека на сервер',className:'opacity',position:{right:0,top:0}});
@@ -378,8 +392,10 @@ function playtrack (filename, artist, trak, save) {
             $("#jquery_jplayer_1").jPlayer("setMedia", {
                 mp3: "/media/"+filename
             }).jPlayer("play");
+
             $(".jp-name-artist").text(artist);
             $(".jp-name-song").text(trak);
+
         }
     }
 }

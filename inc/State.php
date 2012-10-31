@@ -63,7 +63,7 @@ if (defined("AKPLAYER")) {
             }
         }
 
-        static function GetSongbySerial($serial) {
+        static function GetSongbySerial($serial, $mp3 = true) {
             global $app;
             if (isset($serial)) {
                 $uid = CUser::GetUserId();
@@ -73,13 +73,22 @@ if (defined("AKPLAYER")) {
                         $list = Core::Search($state['search'], 1, $serial-1);
                         $list = $list['response'];
                         $list = $list[1];
-                        $filename = "{$list['owner_id']}_{$list['aid']}.mp3";
+                        if ($mp3) {
+                            $filename = "{$list['owner_id']}_{$list['aid']}.mp3";
+                        } else {
+                            $filename = "{$list['owner_id']}_{$list['aid']}";
+                        }
+
                         return $filename;
                     } elseif ($state ['playlistid'] == 'top100') {
                         $list = Core::GetTop100(1, $serial-1);
                         $list = $list['response'];
                         $list = $list[0];
-                        $filename = "{$list['owner_id']}_{$list['aid']}.mp3";
+                        if ($mp3) {
+                            $filename = "{$list['owner_id']}_{$list['aid']}.mp3";
+                        } else {
+                            $filename = "{$list['owner_id']}_{$list['aid']}";
+                        }
                         return $filename;
                     } else {
                         return false;
@@ -87,7 +96,11 @@ if (defined("AKPLAYER")) {
                 } elseif ($state ['side'] == 'right') {
                     $list = Plist::GetPlaylist($state['playlistid'], $serial-1);
                     $list = $list[0];
-                    $filename = "{$list['owner_id']}_{$list['aid']}.mp3";
+                    if ($mp3) {
+                        $filename = "{$list['owner_id']}_{$list['aid']}.mp3";
+                    } else {
+                        $filename = "{$list['owner_id']}_{$list['aid']}";
+                    }
                     return $filename;
                 }
             }

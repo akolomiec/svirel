@@ -45,5 +45,6 @@ $app->get('/getstate/', function (Request $request) use ($app) {
     foreach ($state as $key => $value ){
         $result[] = $value;
     }
+    $result[] = State::GetSongbySerial($state['serial'], false);
     return $app->json($result, 200);
 })->bind('getstate');
