@@ -247,7 +247,7 @@ function init () {
     add_in_playlist_button.bind('click', function (event) {
         event.preventDefault();
         event.stopPropagation();
-        addinplaylist($(this).parent());
+        addinplaylist($(this).parent().attr('track-id'));
     });
     var delete_from_playlist_button = $(".delete-sign");
     delete_from_playlist_button.unbind('click');
@@ -657,11 +657,7 @@ function drawright(){
 
 
 function addinplaylist (track) {
-    if (typeof(track) == "undefined" ) {
-        var trackid = $(track).attr('track-id');
-    } else {
-        trackid = track;
-    }
+    var trackid = track;
     var playlistid = $(".pl").attr("id");
     $.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
     $.ajax({
