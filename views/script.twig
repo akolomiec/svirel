@@ -320,9 +320,12 @@ function init () {
 
 function addall(){
     $('#leftblock > .track').each(function () {
+        var playlistid = $(".pl").attr("id");
+        addinplaylistworeload($(this).attr('track-id'));
 
-        addinplaylist($(this).attr('track-id'));
     });
+    drawcenter(playlistid);
+    init();
 }
 
 function addplayinginplaylist () {
@@ -665,7 +668,7 @@ function addinplaylist (track) {
         type:	 'POST',
         data: { trackid: trackid , playlistid: playlistid },
         success: function(response, code){
-            $.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
             drawcenter(playlistid);
         },
         error:  function(xhr, str){
@@ -676,6 +679,30 @@ function addinplaylist (track) {
         }
     });
 }
+
+
+function addinplaylistworeload (track) {
+    var trackid = track;
+    var playlistid = $(".pl").attr("id");
+    $.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+    $.ajax({
+        url:	 "/addinplaylist/",
+        type:	 'POST',
+        data: { trackid: trackid , playlistid: playlistid },
+        success: function(response, code){
+            //$.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
+
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе drawcenter: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        },
+        complete: function () {
+            drawcenter(playlistid);
+            init();
+        }
+    });
+}
+
 
 function delfromplaylist (track) {
     var playlistid = $(".pl").attr('id');
