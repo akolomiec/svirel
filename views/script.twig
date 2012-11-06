@@ -112,11 +112,11 @@ function init () {
     var repeat_button = $('.repeat');
     repeat_button.unbind('click');
     repeat_button.bind('click', function () {
-        $.stickr({note:'Кнопка повтор зажата',className:'opacity',position:{right:0,top:0}});
+        //$.stickr({note:'Кнопка повтор зажата',className:'opacity',position:{right:0,top:0}});
         $.ajax({
             url:	 "/repeat/on",
             success: function(response, code){
-                $.stickr({note:' /repeate/on выполнен',className:'opacity',position:{right:0,top:0}});
+                //$.stickr({note:' /repeate/on выполнен',className:'opacity',position:{right:0,top:0}});
                     $('.repeat').css({'display' : 'none'});
                     $('.repeat-off').css({'display' : 'block'});
             },
@@ -128,11 +128,11 @@ function init () {
     var repeatoff_button = $('.repeat-off');
     repeatoff_button.unbind('click');
     repeatoff_button.bind('click', function () {
-        $.stickr({note:'Кнопка повтор отпущена',className:'opacity',position:{right:0,top:0}});
+        //$.stickr({note:'Кнопка повтор отпущена',className:'opacity',position:{right:0,top:0}});
         $.ajax({
             url:	 "/repeat/off",
             success: function(response, code){
-                $.stickr({note:' /repeate/off выполнен',className:'opacity',position:{right:0,top:0}});
+                //$.stickr({note:' /repeate/off выполнен',className:'opacity',position:{right:0,top:0}});
                     $('.repeat-off').css({'display' : 'none'});
                     $('.repeat').css({'display' : 'block'});
             },
@@ -145,11 +145,11 @@ function init () {
     var shuffle_button = $('.shuffle');
     shuffle_button.unbind('click');
     shuffle_button.bind('click', function () {
-        $.stickr({note:'Кнопка в перемешку зажата',className:'opacity',position:{right:0,top:0}});
+        //$.stickr({note:'Кнопка в перемешку зажата',className:'opacity',position:{right:0,top:0}});
         $.ajax({
             url:	 "/shuffle/on",
             success: function(response, code){
-                $.stickr({note:' /shuffle/on выполнен',className:'opacity',position:{right:0,top:0}});
+                //$.stickr({note:' /shuffle/on выполнен',className:'opacity',position:{right:0,top:0}});
                 $('.shuffle').css({'display' : 'none'});
                 $('.shuffle-off').css({'display' : 'block'});
             },
@@ -162,11 +162,11 @@ function init () {
     var shuffleoff_button = $('.shuffle-off');
     shuffleoff_button.unbind('click');
     shuffleoff_button.bind('click', function () {
-        $.stickr({note:'Кнопка в перемешку отпущена',className:'opacity',position:{right:0,top:0}});
+        //$.stickr({note:'Кнопка в перемешку отпущена',className:'opacity',position:{right:0,top:0}});
         $.ajax({
             url:	 "/shuffle/off",
             success: function(response, code){
-                $.stickr({note:' /shuffle/off выполнен',className:'opacity',position:{right:0,top:0}});
+                //$.stickr({note:' /shuffle/off выполнен',className:'opacity',position:{right:0,top:0}});
                 $('.shuffle-off').css({'display' : 'none'});
                 $('.shuffle').css({'display' : 'block'});
             },
@@ -183,7 +183,7 @@ function init () {
         url = $('#wrapper-for-main-player').attr('track-id');
         if (typeof(url) != "undefined" || url == '') {
             window.open("/getsong/"+url, '_blank');
-            $.stickr({note:' /getsong/' + url,className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:' /getsong/' + url,className:'opacity',position:{right:0,top:0}});
         } else {
             $.stickr({note:' Нет файла для загрузки ' + url,className:'opacity',position:{right:0,top:0}});
         }
@@ -303,6 +303,22 @@ function init () {
     delete_playlist_button2.bind('click', function () {
         delplaylist($(".pl").attr("id"));
     });
+
+    var rename_playlist_button = $(".rename-playlist-item");
+    rename_playlist_button.unbind('click');
+    rename_playlist_button.bind('click', function () {
+        var plname=$('#center-column > .pl_header h1').text();
+        name = prompt("Введите имя плейлиста", plname);
+        if (name != '' && name != null) {
+            renameplaylist($(".pl").attr("id"), name);
+        } else {
+            if (name == '' ) {
+                alert('Плейлист на может иметь пустое имя');
+            }
+        }
+    });
+
+
     var addpllist_button = $("#favourite-btn-small");
     addpllist_button.unbind('click');
     addpllist_button.bind('click', function () {
@@ -317,12 +333,34 @@ function init () {
 
 }
 
+function renameplaylist(playlistid, newname) {
+
+    $.ajax({
+        url:	 "/renameplaylist/",
+        type:	 'POST',
+        data: { playlistid: playlistid, newname: newname },
+        success: function(response, code){
+            if (response == 'myplaylist') {
+                $.stickr({note:'Нельзя переименовать плейлист по умолчанию.',className:'opacity',position:{right:0,top:0}});
+            }
+            //$.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
+
+        },
+        error:  function(xhr, str){
+            $.stickr({note:'Возникла ошибка при запросе drawcenter: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+        },
+        complete: function () {
+            drawcenter(playlistid);
+            drawright();
+            init();
+        }
+    });
+}
 
 function addall(){
+    var playlistid = $(".pl").attr("id");
     $('#leftblock > .track').each(function () {
-        var playlistid = $(".pl").attr("id");
         addinplaylistworeload($(this).attr('track-id'));
-
     });
     drawcenter(playlistid);
     init();
@@ -332,17 +370,17 @@ function addplayinginplaylist () {
     var trackid = $('#wrapper-for-main-player').attr('track-id');
     var playlistid = $(".pl").attr("id");
     if (typeof(trackid) != "undefined") {
-        $.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+        //$.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
         $.ajax({
             url:	 "/addinplaylist/",
             type:	 'POST',
             data: { trackid: trackid , playlistid: playlistid },
             success: function(response, code){
-                $.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
+                //$.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
                 drawcenter(playlistid);
             },
             error:  function(xhr, str){
-                $.stickr({note:'Возникла ошибка при запросе drawcenter: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+                $.stickr({note:'Возникла ошибка при запросе addplayinginplaylist(): ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
             },
             complete: function () {
                 init();
@@ -418,12 +456,12 @@ function playtrack (filename, artist, trak, save) {
 }
 
 function logout() {
-    $.stickr({note:'разлогиниться',className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'разлогиниться',className:'opacity',position:{right:0,top:0}});
     $.cookie('svireluser', null);
     $.ajax({
         url:	 "/logout/",
         success: function(response, code){
-            $.stickr({note:'logout выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'logout выполнен',className:'opacity',position:{right:0,top:0}});
             $("#user").html("");
             $("#registration").html(response);
             drawcenter();
@@ -440,14 +478,14 @@ function logout() {
 
 function search() {
     q = $('input[name="search-input"]').val();
-    if (q == '' || (q.length<=3)) {
+    if (q == '' || (q.length<=2)) {
         $.stickr({note:'Запрос пустой',className:'opacity',position:{right:0,top:0}});
     }else {
         drawleft("s", q);
         drawlsearch();
         init();
     }
-    $.stickr({note:'Search выполнен запрос'+q,className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Search выполнен запрос'+q,className:'opacity',position:{right:0,top:0}});
 }
 
 function playsong (track) {
@@ -472,20 +510,20 @@ function playsong (track) {
         $(player_track).attr('artist', artist);
         $(player_track).attr('trak', trak);
         $(player_track).attr('side', side);
-        $.stickr({note:'Ищу файл '+artist+'-'+trak+' '+trackid,className:'opacity',position:{right:0,top:0}});
+        //$.stickr({note:'Ищу файл '+artist+'-'+trak+' '+trackid,className:'opacity',position:{right:0,top:0}});
         playtrack(trackid+".mp3", artist, trak, "save");
-        $.stickr({note:'Playsong выполнен',className:'opacity',position:{right:0,top:0}});
+        //$.stickr({note:'Playsong выполнен',className:'opacity',position:{right:0,top:0}});
     }
 }
 
 function changepage(url ,page, totalpages, side) {
-    $.stickr({note:'Запрос '+url,className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Запрос '+url,className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 url+page,
         type:	 'GET',
         success: function(response, code){
             if ((code==200) || (response != "") ){
-                $.stickr({note:'changepage выполнен'+url+page,className:'opacity',position:{right:0,top:0}});
+                //$.stickr({note:'changepage выполнен'+url+page,className:'opacity',position:{right:0,top:0}});
                 if (side == 'left') {
                     $("#leftblock").html(response);
                     delete pageleft; pageleft = new Paginator('pageleft', totalpages, 10, page, url, 'left');
@@ -512,7 +550,7 @@ function changepage(url ,page, totalpages, side) {
 
 function getpage(url ,page, num ,totalpages, side) {
     num = num == null;
-    $.stickr({note:'Запрос '+url+ page,className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Запрос '+url+ page,className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 url+page,
         type:	 'GET',
@@ -524,7 +562,7 @@ function getpage(url ,page, num ,totalpages, side) {
                 } else {
                     par = $(".pl");
                 }
-                $.stickr({note:'getpage выполнен'+url,className:'opacity',position:{right:0,top:0}});
+                //$.stickr({note:'getpage выполнен'+url,className:'opacity',position:{right:0,top:0}});
                 if (num) {
                     plnow = $(par).html(response).find(".track:first");
                 } else {
@@ -581,15 +619,15 @@ function regauth () {
     //todo При входе в систему сохранять поисковые запросы которые делал пользователь.
     login = $('input[name="login"]').val();
     pass  = $('input[name="password"]').val();
-    $.stickr({note:'Топаем регистрироваться или логиниться: login: '+login+' Pass: '+ pass,className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Топаем регистрироваться или логиниться: login: '+login+' Pass: '+ pass,className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/reg/",
         type:	 'POST',
         data: { login: login, pass: pass },
         success: function(response, code){
-            $.stickr({note:'regauthcode = '+code+' выполнен'+response,className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'regauthcode = '+code+' выполнен'+response,className:'opacity',position:{right:0,top:0}});
             if (Checkuser(response)) {
-                $.stickr({note:'Пользователь вошел или зарегистрировался? '+req.id,className:'opacity',position:{right:0,top:0}});
+                //$.stickr({note:'Пользователь вошел или зарегистрировался? '+req.id,className:'opacity',position:{right:0,top:0}});
                 $.cookie('svireluser', req.id,  { expires: 365, path: '/', domain: '{{ cookie_domain }}' });
                 $("#registration").html("");
                 drawright();
@@ -619,13 +657,13 @@ function regauth () {
  *
  * */
 function drawleft(data, req){
-    $.stickr({note:'Загружаем левую колонку',className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Загружаем левую колонку',className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/getleft/",
         type:	 'POST',
         data: { cont: data , req: req},
         success: function (response) {
-            $.stickr({note:'Запрос drawleft выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'Запрос drawleft выполнен',className:'opacity',position:{right:0,top:0}});
             delete pageleft;
             $("#left-column").html(response);
         },
@@ -640,14 +678,14 @@ function drawleft(data, req){
 }
 
 function drawright(){
-    $.stickr({note:'Загружаем правую колонку',className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Загружаем правую колонку',className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/getregistration/",
         type:	 'POST',
         success: function(response, code){
             $("#registration").html(response);
 
-            $.stickr({note:'Запрос drawright выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'Запрос drawright выполнен',className:'opacity',position:{right:0,top:0}});
         },
         error:  function(xhr, str){
             $.stickr({note:'Возникла ошибка при запросе drawcenter: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
@@ -662,7 +700,7 @@ function drawright(){
 function addinplaylist (track) {
     var trackid = track;
     var playlistid = $(".pl").attr("id");
-    $.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/addinplaylist/",
         type:	 'POST',
@@ -684,7 +722,7 @@ function addinplaylist (track) {
 function addinplaylistworeload (track) {
     var trackid = track;
     var playlistid = $(".pl").attr("id");
-    $.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/addinplaylist/",
         type:	 'POST',
@@ -707,13 +745,13 @@ function addinplaylistworeload (track) {
 function delfromplaylist (track) {
     var playlistid = $(".pl").attr('id');
     var serial = $(track).attr("serial");
-    $.stickr({note:'Удалить трек serial='+serial+' из плейлиста с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Удалить трек serial='+serial+' из плейлиста с id='+playlistid,className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/delfromplaylist/",
         type:	 'POST',
         data: { serial: serial , playlistid: playlistid },
         success: function(response, code){
-            $.stickr({note:'Запрос delfromplaylist выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'Запрос delfromplaylist выполнен',className:'opacity',position:{right:0,top:0}});
             $("#center-column").html(response);
         },
         error:  function(xhr, str){
@@ -736,7 +774,7 @@ function newplaylist(playlistname) {
         type:	 'POST',
         data: { playlistname: playlistname },
         success: function(response, code){
-            $.stickr({note:'Запрос drawlsearch выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'Запрос drawlsearch выполнен',className:'opacity',position:{right:0,top:0}});
             drawright();
         },
         error:  function(xhr, str){
@@ -753,10 +791,10 @@ function delplaylist(playlistid) {
         type:	 'POST',
         data: { playlistid: playlistid },
         success: function(response, code){
-            $.stickr({note:'Запрос delete play list выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'Запрос delete play list выполнен',className:'opacity',position:{right:0,top:0}});
             result = $.parseJSON(response);
             if (result.code == 0) {
-                $.stickr({note:'code = 0',className:'opacity',position:{right:0,top:0}});
+                //$.stickr({note:'code = 0',className:'opacity',position:{right:0,top:0}});
                 drawcenter();
                 drawright();
             } else {
@@ -772,7 +810,7 @@ function delplaylist(playlistid) {
     });
 }
 function drawcenter(playlist, page){
-    $.stickr({note:'Загружаем центральную колонку',className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Загружаем центральную колонку',className:'opacity',position:{right:0,top:0}});
     if (typeof(playlist) == "undefined" || playlist == "") {
         playlist = "default";
     }
@@ -783,7 +821,7 @@ function drawcenter(playlist, page){
         url:	 "/getcenter/"+playlist+"/"+page,
         type:	 'GET',
         success: function(response, code){
-            $.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'Запрос drawcenter выполнен',className:'opacity',position:{right:0,top:0}});
             $("#center-column").html(response);
         },
         error:  function(xhr, str){
@@ -799,7 +837,7 @@ function drawlsearch () {
         url:	 "/showlastsearch/",
         type:	 'GET',
         success: function(response, code){
-            $.stickr({note:'Запрос drawlsearch выполнен',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'Запрос drawlsearch выполнен',className:'opacity',position:{right:0,top:0}});
             $("#div-last-search").html(response);
         },
         error:  function(xhr, str){
@@ -842,13 +880,13 @@ function state_save(){
     }
     //todo Когда будет готов сортировка сделать выбор сортировки.
     var sort = "";
-    $.stickr({note:'Сохраняем состояние в базу',className:'opacity',position:{right:0,top:0}});
+    //$.stickr({note:'Сохраняем состояние в базу',className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/state/save/",
         type:	 'POST',
         data: { username: username, side: side, playlistid:playlistid, search: search, serial:serial, currentpage:currentpage, sort:sort },
         success: function(response, code){
-            $.stickr({note:'сохранение состояния прошло успешно.',className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'сохранение состояния прошло успешно.',className:'opacity',position:{right:0,top:0}});
         },
         error:  function(xhr, str){
             $.stickr({note:'Возникла ошибка при сохранении состяния: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});

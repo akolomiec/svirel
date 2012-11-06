@@ -12,7 +12,16 @@ class Plist
         $playlistid = Plist::GetmyPlaylistId($userid);
         return Plist::GetPlaylist($playlistid, $offset);
     }
-
+    public static function rename($playlistid, $name) {
+        $db = new DB;
+        if ($playlistid == Plist::GetmyPlaylistId(CUser::GetUserId())) {
+            return 'myplaylist';
+        } else {
+            $sql = "UPDATE `user_playlist` SET `plname`='{$name}' WHERE `id` = '{$playlistid}';";
+            $db->dbquery($sql);
+            return 'updated';
+        }
+    }
     public static function GetPlName($plid) {
 
         $db = new DB;

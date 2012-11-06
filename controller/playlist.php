@@ -90,3 +90,11 @@ $app->post('/delfromplaylist/', function ( Request $request ) use ($app){
         ));
     };
 });
+
+$app->post('/renameplaylist/', function ( Request $request ) use ($app){
+    $playlistid = $request->get('playlistid');
+    $name = $request->get('newname');
+    $res = Plist::rename($playlistid, $name);
+    return new Response($res);
+
+});
