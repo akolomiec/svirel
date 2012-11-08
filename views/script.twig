@@ -358,12 +358,11 @@ function renameplaylist(playlistid, newname) {
 }
 
 function addall(){
-    var playlistid = $(".pl").attr("id");
+    var arr = [];
     $('#leftblock > .track').each(function () {
-        addinplaylistworeload($(this).attr('track-id'));
+        arr.push($(this).attr('track-id'));
     });
-    drawcenter(playlistid);
-    init();
+    addinplaylistworeload(arr);
 }
 
 function addplayinginplaylist () {
@@ -603,11 +602,13 @@ function Checkuser(responce) {
     if ( isNaN(req.id) ) {
         if ( req.code == 1 ) {
             $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
+            $('#pass-error').css({"display" :"block"});
         }
         if ( req.code == 2 ) {
             $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
         }
         if ( req.code == 3 ) {
+            $('#login-error').css({"display" :"block"});
             $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
         }
     } else {
@@ -719,12 +720,18 @@ function addinplaylist (track) {
 }
 
 
-function addinplaylistworeload (track) {
-    var trackid = track;
+function addinplaylistworeload (arr) {
+    var trackid = $.toJSON(arr);
     var playlistid = $(".pl").attr("id");
+    var currentpage = '';
+    if (typeof (pagecenter) != "undefined") {
+        currentpage = pagecenter.inputData.pageCurrent;
+    } else {
+        currentpage=0;
+    }
     //$.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
     $.ajax({
-        url:	 "/addinplaylist/",
+        url:	 "/addinplaylistjson/",
         type:	 'POST',
         data: { trackid: trackid , playlistid: playlistid },
         success: function(response, code){
@@ -745,6 +752,7 @@ function addinplaylistworeload (track) {
 function delfromplaylist (track) {
     var playlistid = $(".pl").attr('id');
     var serial = $(track).attr("serial");
+    var currpage =
     //$.stickr({note:'Удалить трек serial='+serial+' из плейлиста с id='+playlistid,className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/delfromplaylist/",
@@ -893,5 +901,7 @@ function state_save(){
         }
     });
 }
+
+
 
 </script>

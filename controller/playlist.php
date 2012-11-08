@@ -64,6 +64,19 @@ $app->post('/addinplaylist/', function ( Request $request ) use ($app){
     };
 });
 
+$app->post('/addinplaylistjson/', function ( Request $request ) use ($app){
+    $side = 'right';
+    $trackid = json_decode($request->get('trackid'));
+    $playlistid = $request->get('playlistid');
+    foreach ($trackid as $key => $value) {
+        $app['monolog']->addInfo('Добавляем песню в плейлист', array('key' => $key ,'value' => $value, 'playlistid' => $playlistid));
+        Plist::Addtrack($playlistid, $value);
+    }
+
+    });
+
+
+
 
 $app->post('/delfromplaylist/', function ( Request $request ) use ($app){
     //Log::write (__FILE__." Удаляем песню из плейлиста",__LINE__);
