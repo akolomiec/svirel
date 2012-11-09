@@ -3784,3 +3784,7 @@
 [2012-10-23 11:43:18] myapp.DEBUG: dbquery Затронуто записей {"rows":1} []
 [2012-10-23 11:43:18] myapp.DEBUG: save Запрос выполнен  {"sql":"UPDATE `state` SET `side`='right', `serial`='3', `page`='1', `playlistid`='144' WHERE `user_id` ='240';","rows":1} []
 [2012-10-23 11:43:18] myapp.INFO: < 200 [] []
+[2012-11-08 10:07:36] myapp.DEBUG: db_connect Подключение к базе не произведено {"Err_no":2002,"Err_msg":null} []
+[2012-11-08 10:07:36] myapp.CRITICAL: __construct Не удалось подключиться к базе. Самофраг! {"dbhost":"localhost","dbusername":"root","dbpass":"KRUS56_ak+","dbport":"3306","dbname":"akplayer_test","dbcharset":"utf8"} []
+[2012-11-08 10:07:38] myapp.DEBUG: db_connect Подключение к базе не произведено {"Err_no":2002,"Err_msg":null} []
+[2012-11-08 10:07:38] myapp.CRITICAL: __construct Не удалось подключиться к базе. Самофраг! {"dbhost":"localhost","dbusername":"root","dbpass":"KRUS56_ak+","dbport":"3306","dbname":"akplayer_test","dbcharset":"utf8"} []

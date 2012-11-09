@@ -724,7 +724,7 @@ function addinplaylistworeload (arr) {
     var trackid = $.toJSON(arr);
     var playlistid = $(".pl").attr("id");
     var currentpage = '';
-    if (typeof (pagecenter) != "undefined") {
+    if (typeof (pagecenter.inputData) != "undefined") {
         currentpage = pagecenter.inputData.pageCurrent;
     } else {
         currentpage=0;
@@ -872,7 +872,7 @@ function state_save(){
     var search = $('input[name="search-input"]').val();
     var serial = trsel.attr("serial");
     if (side == 'left'){
-        if (typeof (pageleft) != "undefined") {
+        if (typeof (pageleft.inputData) != "undefined") {
             currentpage = pageleft.inputData.pageCurrent;
 
         } else {
@@ -880,7 +880,7 @@ function state_save(){
         }
 
     } else {
-        if (typeof (pagecenter) != "undefined") {
+        if (typeof (pagecenter.inputData) != "undefined") {
             currentpage = pagecenter.inputData.pageCurrent;
         } else {
             currentpage=1;
