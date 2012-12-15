@@ -48,7 +48,6 @@ $app->post('/getleft/', function (Request $request) use ($app) {
                         if ($totalpages>50) {
                             $totalpages = 1000/ $GLOBALS['conf']['trackperpage'];
                         }
-
                     } else {
 						$i++;
                         $time = $value["duration"];

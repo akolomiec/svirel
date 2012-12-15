@@ -9,6 +9,7 @@
 
 
 $(document).ready(function(){
+    window.player_track = new Object();
     init_jplayer();
     drawleft();
     drawcenter();
@@ -65,18 +66,18 @@ function set_selection(){
 
     $.getJSON("/getstate/",function(data){
                 $(".track.track-selected").removeClass("track-selected");
-                var playing_track = $("#wrapper-for-main-player");
-                playing_track.attr('track-id', data[9]);
-                playing_track.attr('artist', $(".jp-name-artist").text());
-                playing_track.attr('trak', $(".jp-name-song").text());
-                playing_track.attr('side', data[1]);
-                playing_track.attr('playlistid', data[6]);
-                playing_track.attr('serial', data[2]);
-                playing_track.attr('search', data[3]);
+                window.playing_track = new Object();
+                window.playing_track.track_id = data[9];
+                window.playing_track.artist = $(".jp-name-artist").text();
+                window.playing_track.name = $(".jp-name-song").text();
+                window.playing_track.side = data[1];
+                window.playing_track.playlistid = data[6];
+                window.playing_track.serial = data[2];
+                window.playing_track.search = data[3];
         if (data[1] == "right" && data[6] == $(".pl").attr("id")) {
             $('.pl > .track[serial='+data[2]+']').addClass("track-selected");
         } else{
-            if (data[1] == "left" && data[6] == $('leftblock').attr('lbid')) {
+            if (data[1] == "left" && data[6] == $('#leftblock').attr('lbid')) {
                 if (data[3] == $('input[name="search-input"]').val()){
                     $('#leftblock > .track[serial='+data[2]+']').addClass("track-selected");
                 }else{
@@ -96,8 +97,7 @@ function shuffle() {
     }
 }
 function getside () {
-    var playing_track = $("#wrapper-for-main-player");
-    return $(playing_track).attr('side');
+    return window.playing_track.side;
 }
 
 
@@ -107,7 +107,8 @@ function init () {
     track_button.unbind('click');
     track_button.bind('click',function () {
         playsong($(this));
-        state_save();
+
+
     });
     var repeat_button = $('.repeat');
     repeat_button.unbind('click');
@@ -193,7 +194,7 @@ function init () {
     prev_button.unbind('click');
     prev_button.bind('click', function () {
         //Если первый трек в списке, то вообще ничего делать не будем.
-        if ($(".track-selected").attr("serial") != 1) {
+
             if (shuffle()) {
                 getrandomtrack();
                 set_selection();
@@ -201,9 +202,7 @@ function init () {
                 getprevtrack();
                 set_selection();
             }
-        } else {
-            //$.stickr({note:'jp-prev выполнен это первый трек в списке',className:'opacity',position:{right:0,top:0}});
-        }
+
 
     });
     var next_button = $('.jp-next');
@@ -412,7 +411,9 @@ function getnexttrack () {
         success: function(response, code){
             var result = $.parseJSON(response);
             if (result) {
+
                 playtrack(result['filename'], result['artist'], result['trak']);
+
             }
             //$.stickr({note:' /getnexttrack/ выполнен',className:'opacity',position:{right:0,top:0}});
         },
@@ -423,13 +424,15 @@ function getnexttrack () {
 }
 
 function getrandomtrack() {
-    //$.stickr({note:'Отправляем запрос случайного трека на сервер',className:'opacity',position:{right:0,top:0}});
+    $.stickr({note:'Отправляем запрос случайного трека на сервер'+window.playing_track.side,className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/getrandomtrack/",
         success: function(response, code){
             var result = $.parseJSON(response);
             if (result) {
+
                 playtrack(result['filename'], result['artist'], result['trak']);
+
             }
             //$.stickr({note:' /getrandomtrack/ выполнен',className:'opacity',position:{right:0,top:0}});
         },
@@ -440,7 +443,7 @@ function getrandomtrack() {
 }
 
 
-function playtrack (filename, artist, trak, save) {
+function playtrack (filename, artist, name) {
     if (typeof (filename) != 'undefined'){
         if (filename != "undefined.mp3"){
             $("#jquery_jplayer_1").jPlayer("setMedia", {
@@ -448,7 +451,7 @@ function playtrack (filename, artist, trak, save) {
             }).jPlayer("play");
 
             $(".jp-name-artist").text(artist);
-            $(".jp-name-song").text(trak);
+            $(".jp-name-song").text(name);
 
         }
     }
@@ -487,31 +490,29 @@ function search() {
     //$.stickr({note:'Search выполнен запрос'+q,className:'opacity',position:{right:0,top:0}});
 }
 
-function playsong (track) {
-    $(".jp-seek-bar").css("width","0%");
-    player_track = $("#wrapper-for-main-player");
+function playsong (in_track) {
     $('.track-selected').removeClass('track-selected');
-    $(track).addClass('track-selected');
-    var trackid = $(track).attr('track-id');
-    var artist = $(track).find(".track_artist").text();
-    var trak= $(track).find(".track_name").text();
-    if (trackid != "undefined" && typeof (trackid) != 'undefined') {
+    //alert($(in_track).attr('track-id'));
+    $(in_track).addClass('track-selected');
+    window.playing_track = [];
+    window.playing_track.track_id = $(in_track).attr('track-id');
+    window.playing_track.artist = $(in_track).find(".track_artist").text();
+    window.playing_track.name= $(in_track).find(".track_name").text();
+    window.playing_track.serial = $(in_track).attr('serial');
+    if (window.playing_track.track_id != "undefined" && typeof (window.playing_track.track_id) != 'undefined') {
         var par = $(".track-selected.track").parent();
-        var side = '';
+        window.playing_track.side = '';
         if ($(par).hasClass("left-block-top100")){
-            side = 'left';
+            window.playing_track.side = 'left';
         } else {
             if ($(par).hasClass("pl")) {
-                side = 'right';
+                window.playing_track.side = 'right';
             }
         }
-        $(player_track).attr('track-id', trackid);
-        $(player_track).attr('artist', artist);
-        $(player_track).attr('trak', trak);
-        $(player_track).attr('side', side);
         //$.stickr({note:'Ищу файл '+artist+'-'+trak+' '+trackid,className:'opacity',position:{right:0,top:0}});
-        playtrack(trackid+".mp3", artist, trak, "save");
+        playtrack(window.playing_track.track_id+".mp3", window.playing_track.artist, window.playing_track.name);
         //$.stickr({note:'Playsong выполнен',className:'opacity',position:{right:0,top:0}});
+        state_save();
     }
 }
 
@@ -858,41 +859,40 @@ function drawlsearch () {
 }
 
 function state_save(){
-    var username = $.cookie('svireluser');
-    var trsel = $(".track-selected");
-    var par = trsel.parent();
-    var side = getside();
-    var playlistid ='';
-    var currentpage = '';
-    if (side == 'left') {
-        playlistid = $("#leftblock").attr("lbid");
+    var state = new Object();
+    state.username = $.cookie('svireluser');
+    state.playlistid ='';
+    state.currentpage = '';
+    state.side = getside();
+    if (window.playing_track.side == 'left') {
+        state.playlistid = $("#leftblock").attr("lbid");
     } else {
-        playlistid = $(".pl").attr("id");
+        state.playlistid = $(".pl").attr("id");
     }
-    var search = $('input[name="search-input"]').val();
-    var serial = trsel.attr("serial");
-    if (side == 'left'){
+    state.search = $('input[name="search-input"]').val();
+    state.serial = window.playing_track.serial;
+    if (window.playing_track.side == 'left'){
         if (typeof (pageleft.inputData) != "undefined") {
-            currentpage = pageleft.inputData.pageCurrent;
-
+            state.currentpage = pageleft.inputData.pageCurrent;
         } else {
-            currentpage=1;
+            state.currentpage=1;
         }
-
     } else {
         if (typeof (pagecenter.inputData) != "undefined") {
-            currentpage = pagecenter.inputData.pageCurrent;
+            state.currentpage = pagecenter.inputData.pageCurrent;
         } else {
-            currentpage=1;
+            state.currentpage=1;
         }
     }
     //todo Когда будет готов сортировка сделать выбор сортировки.
-    var sort = "";
+    state.sort = "";
+
+
     //$.stickr({note:'Сохраняем состояние в базу',className:'opacity',position:{right:0,top:0}});
     $.ajax({
         url:	 "/state/save/",
         type:	 'POST',
-        data: { username: username, side: side, playlistid:playlistid, search: search, serial:serial, currentpage:currentpage, sort:sort },
+        data: { username: state.username, side: state.side, playlistid: state.playlistid, search: state.search, serial:state.serial, currentpage:state.currentpage, sort:state.sort },
         success: function(response, code){
             //$.stickr({note:'сохранение состояния прошло успешно.',className:'opacity',position:{right:0,top:0}});
         },

@@ -10,7 +10,7 @@ if (defined("AKPLAYER")) {
     $GLOBALS['conf'] = array(
         'web_root'      => 'http://svirel.akmain.org/',
         'upload_dir'    => APPLICATION_PATH . DS . 'media' . DS,
-        'main_title'    => 'AK-player самый удобный mp3-плеер в вашем браузере.',
+        'main_title'    => 'AK-player самый удобный mp3-плеер в браузере.',
         'db_host'       => 'localhost',
         'db_user'       => 'root',
         'db_password'   => 'KRUS56_ak+',

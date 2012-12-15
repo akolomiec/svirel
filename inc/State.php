@@ -30,6 +30,7 @@ if (defined("AKPLAYER")) {
             $app['monolog']->AddDebug(__FUNCTION__.' Сохраняем состояние ', array('sql'=>$sql));
             $base->dbquery($sql);
 
+
         }
 
         static function Getserial($side = 'left', $playlistid = '', $req = '') {
