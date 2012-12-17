@@ -204,7 +204,11 @@ class Core
 	    $i = 0;
         while (!$result){
             $i++;
-            $result = file_get_contents($url);
+            if (!empty($url)){
+                $result = file_get_contents($url);
+            } else {
+                $result = 0;
+            }
             if ($i > 3) {
                 break;
             }

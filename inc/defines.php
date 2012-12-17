@@ -31,4 +31,6 @@ if (defined("AKPLAYER")) {
     require (APPLICATION_PATH."/inc/Plist.php");
     require (APPLICATION_PATH."/inc/LastSearch.php");
     require (APPLICATION_PATH."/inc/State.php");
+    require (APPLICATION_PATH."/inc/Cache.php");
+
 }

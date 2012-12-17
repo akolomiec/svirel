@@ -72,9 +72,8 @@ $app->get('/getnexttrack/', function () use ($app) {
 
 $app->get('/getrandomtrack/', function () use ($app) {
     $state = State::load();
-
     //$serial = $state['serial'] + 1;
-    $serial = mt_rand(1, State::maxtrack($state));
+    $serial = mt_rand(1,State::maxtrack($state));
     $filename = State::GetSongbySerial($serial);
     if (!empty($filename)) {
         $trackid = substr($filename, 0, -4);
