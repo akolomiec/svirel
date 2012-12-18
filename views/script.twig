@@ -329,6 +329,11 @@ function init () {
     addall_button.bind('click', function () {
         addall();
     });
+    var reserialbase = $("#sla");
+    reserialbase.unbind('click');
+    reserialbase.bind('click', function () {
+        addall();
+    });
 
 }
 

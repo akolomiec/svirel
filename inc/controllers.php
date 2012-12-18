@@ -6,7 +6,8 @@ $controllers = array(
     'gettop',
     'registration',
     'playlist',
-    'state'
+    'state',
+    'test'
 );
 
 foreach ($controllers as $controller) {
