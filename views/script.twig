@@ -15,6 +15,7 @@ $(document).ready(function(){
     drawcenter();
     drawright();
     drawlsearch();
+    loading_off();
 
 });
 
@@ -113,6 +114,7 @@ function init () {
     var repeat_button = $('.repeat');
     repeat_button.unbind('click');
     repeat_button.bind('click', function () {
+        loading_on();
         //$.stickr({note:'Кнопка повтор зажата',className:'opacity',position:{right:0,top:0}});
         $.ajax({
             url:	 "/repeat/on",
@@ -120,9 +122,11 @@ function init () {
                 //$.stickr({note:' /repeate/on выполнен',className:'opacity',position:{right:0,top:0}});
                     $('.repeat').css({'display' : 'none'});
                     $('.repeat-off').css({'display' : 'block'});
+                loading_off();
             },
             error:  function(xhr, str){
                 $.stickr({note:'Возникла ошибка: '+str+xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+                loading_off();
             }
         });
     });
@@ -130,15 +134,18 @@ function init () {
     repeatoff_button.unbind('click');
     repeatoff_button.bind('click', function () {
         //$.stickr({note:'Кнопка повтор отпущена',className:'opacity',position:{right:0,top:0}});
+        loading_on();
         $.ajax({
             url:	 "/repeat/off",
             success: function(response, code){
                 //$.stickr({note:' /repeate/off выполнен',className:'opacity',position:{right:0,top:0}});
                     $('.repeat-off').css({'display' : 'none'});
                     $('.repeat').css({'display' : 'block'});
+                loading_off();
             },
             error:  function(xhr, str){
                 $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+                loading_off();
             }
         });
     });
@@ -147,15 +154,18 @@ function init () {
     shuffle_button.unbind('click');
     shuffle_button.bind('click', function () {
         //$.stickr({note:'Кнопка в перемешку зажата',className:'opacity',position:{right:0,top:0}});
+        loading_on();
         $.ajax({
             url:	 "/shuffle/on",
             success: function(response, code){
                 //$.stickr({note:' /shuffle/on выполнен',className:'opacity',position:{right:0,top:0}});
                 $('.shuffle').css({'display' : 'none'});
                 $('.shuffle-off').css({'display' : 'block'});
+                loading_off();
             },
             error:  function(xhr, str){
                 $.stickr({note:'Возникла ошибка: '+str+xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+                loading_off();
             }
         });
     });
@@ -164,15 +174,18 @@ function init () {
     shuffleoff_button.unbind('click');
     shuffleoff_button.bind('click', function () {
         //$.stickr({note:'Кнопка в перемешку отпущена',className:'opacity',position:{right:0,top:0}});
+        loading_on();
         $.ajax({
             url:	 "/shuffle/off",
             success: function(response, code){
                 //$.stickr({note:' /shuffle/off выполнен',className:'opacity',position:{right:0,top:0}});
                 $('.shuffle-off').css({'display' : 'none'});
                 $('.shuffle').css({'display' : 'block'});
+                loading_off();
             },
             error:  function(xhr, str){
                 $.stickr({note:'Возникла ошибка: '+ str + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+                loading_off();
             }
         });
     });
@@ -338,7 +351,7 @@ function init () {
 }
 
 function renameplaylist(playlistid, newname) {
-
+    loading_on();
     $.ajax({
         url:	 "/renameplaylist/",
         type:	 'POST',
@@ -357,6 +370,7 @@ function renameplaylist(playlistid, newname) {
             drawcenter(playlistid);
             drawright();
             init();
+            loading_off();
         }
     });
 }
@@ -374,6 +388,7 @@ function addplayinginplaylist () {
     var playlistid = $(".pl").attr("id");
     if (typeof(trackid) != "undefined") {
         //$.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+        loading_on();
         $.ajax({
             url:	 "/addinplaylist/",
             type:	 'POST',
@@ -387,6 +402,7 @@ function addplayinginplaylist () {
             },
             complete: function () {
                 init();
+                loading_off();
             }
         });
     }
@@ -395,6 +411,7 @@ function addplayinginplaylist () {
 
 function getprevtrack () {
     //$.stickr({note:'Отправляем запрос предыдущего трека на сервер',className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 "/getprevtrack/",
         success: function(response, code){
@@ -403,14 +420,17 @@ function getprevtrack () {
                 playtrack(result['filename'], result['artist'], result['trak']);
             }
             //$.stickr({note:' /getprevtrack/ выполнен',className:'opacity',position:{right:0,top:0}});
+            loading_off();
         },
         error:  function(xhr, str){
             $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+            loading_off();
         }
     });
 }
 function getnexttrack () {
     //$.stickr({note:'Отправляем запрос следующего трека на сервер',className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 "/getnexttrack/",
         success: function(response, code){
@@ -421,15 +441,18 @@ function getnexttrack () {
 
             }
             //$.stickr({note:' /getnexttrack/ выполнен',className:'opacity',position:{right:0,top:0}});
+            loading_off();
         },
         error:  function(xhr, str){
             $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+            loading_off();
         }
     });
 }
 
 function getrandomtrack() {
     $.stickr({note:'Отправляем запрос случайного трека на сервер'+window.playing_track.side,className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 "/getrandomtrack/",
         success: function(response, code){
@@ -440,9 +463,11 @@ function getrandomtrack() {
 
             }
             //$.stickr({note:' /getrandomtrack/ выполнен',className:'opacity',position:{right:0,top:0}});
+            loading_off();
         },
         error:  function(xhr, str){
             $.stickr({note:'Возникла ошибка: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+            loading_off();
         }
     });
 }
@@ -464,6 +489,7 @@ function playtrack (filename, artist, name) {
 
 function logout() {
     //$.stickr({note:'разлогиниться',className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.cookie('svireluser', null);
     $.ajax({
         url:	 "/logout/",
@@ -479,6 +505,7 @@ function logout() {
         },
         complete: function (response) {
             init();
+            loading_off();
         }
     });
 }
@@ -523,6 +550,7 @@ function playsong (in_track) {
 
 function changepage(url ,page, totalpages, side) {
     //$.stickr({note:'Запрос '+url,className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 url+page,
         type:	 'GET',
@@ -548,6 +576,7 @@ function changepage(url ,page, totalpages, side) {
         },
         complete: function (response) {
             init();
+            loading_off();
         }
     });
     return false;
@@ -556,6 +585,7 @@ function changepage(url ,page, totalpages, side) {
 function getpage(url ,page, num ,totalpages, side) {
     num = num == null;
     //$.stickr({note:'Запрос '+url+ page,className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 url+page,
         type:	 'GET',
@@ -596,7 +626,7 @@ function getpage(url ,page, num ,totalpages, side) {
         },
         complete: function () {
             init();
-
+            loading_off();
         }
     });
 
@@ -622,17 +652,28 @@ function Checkuser(responce) {
     }
 }
 
+function loading_on (){
+    $("#loading").fadeIn('slow');
+}
+
+function loading_off (){
+    $("#loading").fadeOut('slow');
+}
+
+
+
 function regauth () {
     //todo При входе в систему сохранять поисковые запросы которые делал пользователь.
     login = $('input[name="login"]').val();
     pass  = $('input[name="password"]').val();
     //$.stickr({note:'Топаем регистрироваться или логиниться: login: '+login+' Pass: '+ pass,className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 "/reg/",
         type:	 'POST',
         data: { login: login, pass: pass },
         success: function(response, code){
-            //$.stickr({note:'regauthcode = '+code+' выполнен'+response,className:'opacity',position:{right:0,top:0}});
+            $.stickr({note:'regauthcode = '+code+' выполнен'+response,className:'opacity',position:{right:0,top:0}});
             if (Checkuser(response)) {
                 //$.stickr({note:'Пользователь вошел или зарегистрировался? '+req.id,className:'opacity',position:{right:0,top:0}});
                 $.cookie('svireluser', req.id,  { expires: 365, path: '/', domain: '{{ cookie_domain }}' });
@@ -647,6 +688,7 @@ function regauth () {
         },
         complete: function (response) {
             init();
+            loading_off();
         }
     });
 }
@@ -665,6 +707,7 @@ function regauth () {
  * */
 function drawleft(data, req){
     //$.stickr({note:'Загружаем левую колонку',className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 "/getleft/",
         type:	 'POST',
@@ -680,12 +723,14 @@ function drawleft(data, req){
         complete: function () {
             drawlsearch();
             init();
+            loading_off();
         }
     });
 }
 
 function drawright(){
     //$.stickr({note:'Загружаем правую колонку',className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 "/getregistration/",
         type:	 'POST',
@@ -701,6 +746,7 @@ function drawright(){
             init();
         }
     });
+    loading_off();
 }
 
 
@@ -708,6 +754,7 @@ function addinplaylist (track) {
     var trackid = track;
     var playlistid = $(".pl").attr("id");
     //$.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 "/addinplaylist/",
         type:	 'POST',
@@ -721,6 +768,7 @@ function addinplaylist (track) {
         },
         complete: function () {
             init();
+            loading_off();
         }
     });
 }
@@ -736,6 +784,7 @@ function addinplaylistworeload (arr) {
         currentpage=0;
     }
     //$.stickr({note:'Добавить трек id='+trackid+' в плейлист с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 "/addinplaylistjson/",
         type:	 'POST',
@@ -750,6 +799,7 @@ function addinplaylistworeload (arr) {
         complete: function () {
             drawcenter(playlistid);
             init();
+            loading_off();
         }
     });
 }
@@ -758,8 +808,8 @@ function addinplaylistworeload (arr) {
 function delfromplaylist (track) {
     var playlistid = $(".pl").attr('id');
     var serial = $(track).attr("serial");
-    var currpage =
     //$.stickr({note:'Удалить трек serial='+serial+' из плейлиста с id='+playlistid,className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 "/delfromplaylist/",
         type:	 'POST',
@@ -773,6 +823,7 @@ function delfromplaylist (track) {
         },
         complete: function () {
             init();
+            loading_off();
         }
     });
 }
@@ -783,6 +834,7 @@ function save_sign (track) {
 }
 
 function newplaylist(playlistname) {
+    loading_on();
     $.ajax({
         url:	 "/newplaylist/",
         type:	 'POST',
@@ -796,10 +848,12 @@ function newplaylist(playlistname) {
         },
         complete: function () {
             init();
+            loading_off();
         }
     });
 }
 function delplaylist(playlistid) {
+    loading_on();
     $.ajax({
         url:	 "/delplaylist/",
         type:	 'POST',
@@ -820,6 +874,7 @@ function delplaylist(playlistid) {
         },
         complete: function () {
             init();
+            loading_off();
         }
     });
 }
@@ -831,6 +886,7 @@ function drawcenter(playlist, page){
     if (typeof(page) == "undefined") {
         page = 0;
     }
+    loading_on();
     $.ajax({
         url:	 "/getcenter/"+playlist+"/"+page,
         type:	 'GET',
@@ -843,6 +899,7 @@ function drawcenter(playlist, page){
         },
         complete: function () {
             init();
+            loading_off();
         }
     });
 }
@@ -894,15 +951,18 @@ function state_save(){
 
 
     //$.stickr({note:'Сохраняем состояние в базу',className:'opacity',position:{right:0,top:0}});
+    loading_on();
     $.ajax({
         url:	 "/state/save/",
         type:	 'POST',
         data: { username: state.username, side: state.side, playlistid: state.playlistid, search: state.search, serial:state.serial, currentpage:state.currentpage, sort:state.sort },
         success: function(response, code){
             //$.stickr({note:'сохранение состояния прошло успешно.',className:'opacity',position:{right:0,top:0}});
+            loading_off();
         },
         error:  function(xhr, str){
             $.stickr({note:'Возникла ошибка при сохранении состяния: ' + xhr.responseCode,className:'opacity',position:{right:0,top:0}});
+            loading_off();
         }
     });
 }

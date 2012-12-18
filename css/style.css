@@ -780,4 +780,14 @@ h1{
 
 /* Конец библиотека Stikr */
 
+/* loading */
+#loading {
+    top: 150px; /* Положение от нижнего края */
+    left: 50%;
+    height: 50px;
+    width: 50px;
+    background-image: url('../images/controls-light/loading25.gif');
+    position: fixed;
+}
+
 

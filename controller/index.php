@@ -78,8 +78,8 @@ $app->post('/getleft/', function (Request $request) use ($app) {
         $header = "ТОП 100";
         $page = 1;
         $totalpages = 5;
-        if ($list = Core::GetTop100($GLOBALS['conf']['trackperpage'],0)){
-            $reslt = $list['response'];
+        if ($list = Plist::GetPlaylist(1, 0)){
+            $reslt = $list;
             $list = null;
             $i=0;
             foreach ($reslt as $key => $value) {
@@ -92,8 +92,6 @@ $app->post('/getleft/', function (Request $request) use ($app) {
                 }
                 else {
                     $i++;
-                    $time = $value["duration"];
-                    $value["duration"] = Core::sec2time($time);
                     $value["serial"] = $i;
                     $list[] = $value;
                 }

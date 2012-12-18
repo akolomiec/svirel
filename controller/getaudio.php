@@ -30,7 +30,6 @@ $app->get('/getprevtrack/', function () use ($app) {
         $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
         $data = json_decode($resp, true);
         $data = $data['response'];
-
         State::save($state['user_id'], $state['side'], $state['playlistid'], $state['search'], $serial, $state['currentpage'], $state['repeat'], $state['shuffle'], $state['sort']);
         return json_encode(array('filename' => $filename, 'artist' => $data[0]['artist'], 'trak' => $data[0]['title']));
     } else {
@@ -72,7 +71,6 @@ $app->get('/getnexttrack/', function () use ($app) {
 
 $app->get('/getrandomtrack/', function () use ($app) {
     $state = State::load();
-    //$serial = $state['serial'] + 1;
     $serial = mt_rand(1,State::maxtrack($state));
     $filename = State::GetSongbySerial($serial);
     if (!empty($filename)) {

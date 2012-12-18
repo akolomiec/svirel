@@ -4,14 +4,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 $app->get('/top100/{page}', function ($page) use ($app) {
     $side = 'left';
-    $response =  Core::GetTop100 ($GLOBALS['conf']['trackperpage'], ($page-1)*$GLOBALS['conf']['trackperpage']);
-    $reslt = $response['response'];
+    $response = Plist::GetPlaylist(1, ($page-1)*$GLOBALS['conf']['trackperpage']);
+    $reslt = $response;
     $i = 0+($page-1)*$GLOBALS['conf']['trackperpage'];
     foreach ($reslt as $key => $value) {
         $i++;
-        $time = $value["duration"];
-        $value["duration"] = Core::sec2time($time);
-        $value["serial"] = $i;
         $top100[] = $value;
     }
     $serial = State::Getserial($side, 'top100');

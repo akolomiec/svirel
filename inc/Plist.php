@@ -100,6 +100,7 @@ class Plist
         $db = new DB;
         $sql = "SELECT serial FROM `playlist` WHERE playlist_id = '{$playlistid}' ORDER BY serial DESC";
         $result = $db->dbquery($sql);
+        var_dump($result);
         return $result[0]['serial'];
     }
 
@@ -144,6 +145,7 @@ class Plist
         $db = new DB;
         $sql = "SELECT * FROM `playlist` WHERE `playlist_id` = '{$playlistid}' ORDER BY `serial` LIMIT {$offset}, {$trackperpage};";
         $res = $db->dbquery($sql);
+
         if (is_array($res)) {
 
             foreach ($res as $key => $value) {

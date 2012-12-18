@@ -69,6 +69,7 @@ if (defined("AKPLAYER")) {
             if (isset($serial)) {
                 $uid = CUser::GetUserId();
                 $state = self::load();
+
                 if ($state['side'] == 'left'){
                     if ($state ['playlistid'] == 'search'){
                         $list = Core::Search($state['search'], 1, $serial-1);
@@ -82,29 +83,27 @@ if (defined("AKPLAYER")) {
 
                         return $filename;
                     } elseif ($state ['playlistid'] == 'top100') {
-                        $list = Core::GetTop100(1, $serial-1);
-                        $list = $list['response'];
-                        $list = $list[0];
-                        if ($mp3) {
-                            $filename = "{$list['owner_id']}_{$list['aid']}.mp3";
-                        } else {
-                            $filename = "{$list['owner_id']}_{$list['aid']}";
-                        }
-                        return $filename;
+                        $state ['playlistid'] = 1;
+                        return self::getfilename($state, $list, $serial, $mp3);
                     } else {
                         return false;
                     }
                 } elseif ($state ['side'] == 'right') {
-                    $list = Plist::GetPlaylist($state['playlistid'], $serial-1);
-                    $list = $list[0];
-                    if ($mp3) {
-                        $filename = "{$list['owner_id']}_{$list['aid']}.mp3";
-                    } else {
-                        $filename = "{$list['owner_id']}_{$list['aid']}";
-                    }
-                    return $filename;
+
+                    return self::getfilename($state,$list, $serial, $mp3);
                 }
             }
+        }
+        public function getfilename($state, $list, $serial, $mp3 = true) {
+            $list = Plist::GetPlaylist($state['playlistid'], $serial-1);
+            $list = $list[0];
+
+            if ($mp3) {
+                $filename = "{$list['owner_id']}_{$list['aid']}.mp3";
+            } else {
+                $filename = "{$list['owner_id']}_{$list['aid']}";
+            }
+            return $filename;
         }
 
         public static function maxtrack ($state) {
@@ -118,11 +117,18 @@ if (defined("AKPLAYER")) {
                     }
                     return $count;
                 } elseif ($state ['playlistid'] == 'top100') {
-                    $app['monolog']->AddDebug(__FUNCTION__.' Левая сторона, TOP100. результат', array('side'=>$state['side'], 'playlistid'=>$state ['playlistid'], 'res' => 100));
-                    $count = 94;
-                    return $count;
-                } else {
-                    return false;
+                    $state ['playlistid'] = 1;
+
+                    $base = new DB;
+                    $sql = "SELECT COUNT(*) FROM `playlist` WHERE `playlist_id`='{$state['playlistid']}';";
+                    $res = $base->dbquery($sql);
+                    $app['monolog']->AddDebug(__FUNCTION__.' Левая сторона. ТОП 100 результат', array('side'=>$state['side'], 'playlistid'=>$state ['playlistid'], 'res' => $res[0]['COUNT(*)']));
+
+                    if (is_array($res)) {
+                        return $res[0]['COUNT(*)'];
+                    } else {
+                        return false;
+                    }
                 }
             } elseif ($state ['side'] == 'right') {
                 $base = new DB;
@@ -136,6 +142,7 @@ if (defined("AKPLAYER")) {
                 }
             }
         }
+
 
         public static function repeat() {
             global $app;
