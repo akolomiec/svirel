@@ -637,7 +637,7 @@ function Checkuser(responce) {
 //todo Расписать нормально ошибки при регистрации
     if ( isNaN(req.id) ) {
         if ( req.code == 1 ) {
-            $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
+            $.stickr({note:'Ошибка при регистрации: Неверное имя пользователя или пароль',className:'opacity',position:{right:0,top:0}});
             $('#pass-error').css({"display" :"block"});
         }
         if ( req.code == 2 ) {
@@ -645,7 +645,8 @@ function Checkuser(responce) {
         }
         if ( req.code == 3 ) {
             $('#login-error').css({"display" :"block"});
-            $.stickr({note:'Ошибка при регистрации '+req.code,className:'opacity',position:{right:0,top:0}});
+            $('#pass-error').css({"display" :"block"});
+            $.stickr({note:'Ошибка при регистрации: Недопустимый логин или пароль',className:'opacity',position:{right:0,top:0}});
         }
     } else {
         return true;
@@ -673,7 +674,7 @@ function regauth () {
         type:	 'POST',
         data: { login: login, pass: pass },
         success: function(response, code){
-            $.stickr({note:'regauthcode = '+code+' выполнен'+response,className:'opacity',position:{right:0,top:0}});
+            //$.stickr({note:'regauthcode = '+code+' выполнен'+response,className:'opacity',position:{right:0,top:0}});
             if (Checkuser(response)) {
                 //$.stickr({note:'Пользователь вошел или зарегистрировался? '+req.id,className:'opacity',position:{right:0,top:0}});
                 $.cookie('svireluser', req.id,  { expires: 365, path: '/', domain: '{{ cookie_domain }}' });
