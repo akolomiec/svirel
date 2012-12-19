@@ -22,23 +22,33 @@ $app->get('/search/{page}', function ($page) use ($app) {
     $side = 'left';
     $playlistid = 'search';
     $req = $app['session']->get('req');
+
     if ($req) {
         $req = $app->escape($req);
-        if ($list = Core::Search($req, $GLOBALS['conf']['trackperpage'], ($page-1)*$GLOBALS['conf']['trackperpage'])) {
+        $fname = md5("search".$req."_".$page);
+
+        if($cache=unserialize(Cache::readCache($fname, 604800))){
+            $list = $cache;
+        } else {
+            $list = Core::Search($req, $GLOBALS['conf']['trackperpage'], ($page-1)*$GLOBALS['conf']['trackperpage']);
+            Cache::writeCache(serialize($list), $fname);
+        }
+        if ($list) {
             $reslt = $list['response'];
             $list = null;
-    		$i = ($page-1)*$GLOBALS['conf']['trackperpage'];
+            $i = ($page-1)*$GLOBALS['conf']['trackperpage'];
             foreach ($reslt as $key => $value) {
                 if (!is_int($value)){
-				    $i++;
+                    $i++;
                     $time = $value["duration"];
                     $value["duration"] = Core::sec2time($time);
-					$value["serial"] = $i;
+                    $value["serial"] = $i;
                     $list[] = $value;
                 }
             }
             $app['session']->set('req', $req);
             $serial = State::Getserial($side, $playlistid);
+
             return $app['twig']->render('list.twig', array(
                 'list' => $list,
                 'trackselect' => $serial

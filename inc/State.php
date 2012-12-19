@@ -94,7 +94,7 @@ if (defined("AKPLAYER")) {
                 }
             }
         }
-        public function getfilename($state, $list, $serial, $mp3 = true) {
+        public static function getfilename($state, $list, $serial, $mp3 = true) {
             $list = Plist::GetPlaylist($state['playlistid'], $serial-1);
             $list = $list[0];
 

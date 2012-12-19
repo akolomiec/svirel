@@ -4,45 +4,14 @@ class Core
 {
 	public $token,$uid;
 
-        /*
-         *
-         $responce = Lastfm::request("chart.getTopTracks", array("page" => $page, "limit" => $limit));
-        if (isset ($responce->tracks)) {
-            $tracks = $responce->tracks->track;
-        } else {
-            return false;
-        }
-        $result = array();
-        foreach ( $tracks as $track ) {
-            $artist = $track->artist->name;
-            $name = $track->name;
-            $vtrack = self::Search("{$artist} - {$name}", 1, 0);
-            $result['response'][] = $vtrack['response'][1];
-        }
-        return $result;
-    }*/
-    /*
-     *
-   public static function GetTop100 ($count = 100 , $offset = 0) {
-        global $app;
-        $resp = file_get_contents('https://api.vk.com/method/audio.get?&count='.$count.'&offset='.$offset.'&access_token='.Core::taketoken());
-        $data = json_decode($resp, true);
-        if ( empty( $data['response'] ) ) {
-            return false;
-        }
-        if (key_exists('error', $data)) {
-            if ($data["error"]["error_code"] == 5) {
-                Core::deltoken();
-            }
-            return false;
-        } else {
-            return $data;
-        }
-    }
 
-    */
     public static function Search ($req = '' , $count = 100 , $offset = 0) {
         global $app;
+        $filename = md5($req.$count.$offset);
+
+        if($data=unserialize(Cache::readCache($filename, 604800))){
+            return $data;
+        }
         $resp = file_get_contents('https://api.vk.com/method/audio.search?q='.urlencode($req).'&auto_complete=1&count='.$count.'&offset='.$offset.'&access_token='.self::taketoken());
         $data = json_decode($resp, true);
         if (key_exists('error', $data)) {
@@ -51,6 +20,7 @@ class Core
             }
             return false;
         } else {
+            Cache::writeCache(serialize($data), $filename);
             return $data;
         }
     }
@@ -204,6 +174,11 @@ class Core
     }
 
     public static function remotefilesize($url) {
+        $filename = md5("filesize".$url);
+
+        if($cache=unserialize(Cache::readCache($filename, 604800))){
+            return $cache;
+        }   else {
             ob_start();
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_HEADER, 1);
@@ -216,7 +191,13 @@ class Core
             ob_end_clean();
             $regex = '/Content-Length:\s([0-9].+?)\s/';
             preg_match($regex, $head, $matches);
-            return isset($matches[1]) ? $matches[1] : "unknown";
+            $data = isset($matches[1]) ? $matches[1] : "unknown";
+            Cache::writeCache(serialize($data), $filename);
+            return data;
+        }
+
+
+
     }
     public static function getfilevk ($trackid, $url, $size) {
        $filename = $GLOBALS['conf']['upload_dir'].$trackid.".mp3";
@@ -271,87 +252,6 @@ class Core
             return false;
         }
 
-    }
-    public static function lastfm_gettoken() {
-        /*
-         *
-         * svirel
-         * API Key: 1fa4d30d602b85ec1579f0de593b381a
-         * Secret: is 4e2b61191fed912fc64a8e713c552120
-         *
-         *
-         * 1.
-         * Get an API Key
-         * If you don’t already have an API account, please apply for one. For each of your accounts you will have a
-         * shared secret which you will require in Section 6. You will also need to set up a callback url which our
-         * authentication service will redirect to in Section 4.
-         * 2. Request authorization from the user
-         * Send your user to last.fm/api/auth with your API key as a parameter. Use an HTTP GET request. Your request
-         * will look like this:
-         * http://www.last.fm/api/auth/?api_key=xxx
-         * If the user is not logged in to Last.fm, they will be redirected to the login page before being asked to
-         * grant your web application permission to use their account. On this page they will see the name of your
-         * application, along with the application description and logo as supplied in Section 1.
-         * 2.1 Custom callback url
-         * You can optionally specify a callback URL that is different to your API Account callback url. Include this
-         * as a query param cb. This allows you to have users forward to a specific part of your site after the
-         * authorisation process.
-         *
-         * http://www.last.fm/api/auth/?api_key=xxx&cb=http://example.com
-         * 3. Create an authentication handler
-         * Once the user has granted permission to use their account on the Last.fm page, Last.fm will redirect to your
-         * callback url, supplying an authentication token as a GET variable.
-         *
-         * <callback_url>/?token=xxxxxxx
-         *
-         * If the callback url already contains a query string then token variable will be appended, like;
-         *
-         * <callback_url>&token=xxxxxxx
-         *
-         * The script located at your callback url should pick up this authentication token and use it to create a
-         * Last.fm web service session as described in Section 4.
-         *
-         * 3.1 Authentication Tokens
-         * Authentication tokens are user and API account specific. They are valid for 60 minutes from the moment they
-         * are granted.
-         *
-         * 4. Fetch a Web Service Session
-         * Send your api key along with an api signature and your authentication token as arguments to the
-         * auth.getSession API method call. The parameters for this call are defined as such:
-         *
-         * api_key: Your 32-character API Key.
-         * token: The authentication token received at your callback url as a GET variable.
-         * api_sig: Your 32-character API method signature, as explained in Section 6
-         * Note: You can only use an authentication token once. It will be consumed when creating your web service
-         * session.
-         * The response format of this call is shown on the auth.getSession method page.
-         *
-         * 4.1 Session Lifetime
-         * Session keys have an infinite lifetime by default. You are recommended to store the key securely. Users are
-         * able to revoke privileges for your application on their Last.fm settings screen, rendering session keys
-         * invalid.
-         * 5. Make authenticated web service calls
-         * You can now sign your web service calls with a method signature, provided along with the session key you
-         * received in Section 4 and your API key. You will need to include all three as parameters in subsequent calls
-         * in order to be able to access services that require authentication. You can visit individual method call
-         * pages to find out if they require authentication. Your three authentication parameters are defined as:
-         * sk (Required) : The session key returned by auth.getSession service.
-         * api_key (Required) : Your 32-character API key.
-         * api_sig (Required) : Your API method signature, constructed as explained in Section 6
-         * 6. Sign your calls
-         * Construct your api method signatures by first ordering all the parameters sent in your call alphabetically
-         * by parameter name and concatenating them into one string using a <name><value> scheme. So for a call to
-         * auth.getSession you may have:
-         *
-         * api_keyxxxxxxxxmethodauth.getSessiontokenxxxxxxx
-         * Ensure your parameters are utf8 encoded. Now append your secret to this string. Finally, generate an md5
-         * hash of the resulting string. For example, for an account with a secret equal to 'mysecret', your api
-         * signature will be:
-         * api signature = md5("api_keyxxxxxxxxmethodauth.getSessiontokenxxxxxxxmysecret")
-         * Where md5() is an md5 hashing operation and its argument is the string to be hashed. The hashing operation
-         * should return a 32-character hexadecimal md5 hash.
-         * */
-        // http://www.last.fm/api/auth/?api_key=xxx
     }
 
 

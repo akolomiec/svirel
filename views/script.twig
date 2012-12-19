@@ -479,7 +479,7 @@ function playtrack (filename, artist, name) {
             $("#jquery_jplayer_1").jPlayer("setMedia", {
                 mp3: "/media/"+filename
             }).jPlayer("play");
-
+            $('#wrapper-for-main-player').attr('track-id', filename.slice(0,-4));
             $(".jp-name-artist").text(artist);
             $(".jp-name-song").text(name);
 

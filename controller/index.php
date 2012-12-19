@@ -38,7 +38,14 @@ $app->post('/getleft/', function (Request $request) use ($app) {
             $uid = CUser::GetUserId();
             $header = "".$req;
             $page = 1;
-            if ($list = Core::Search($req, $GLOBALS['conf']['trackperpage'],0)) {
+            $fname = md5("search".$req."_".$page);
+            if($cache=unserialize(Cache::readCache($fname, 604800))){
+                $list = $cache;
+            } else {
+                $list = Core::Search($req, $GLOBALS['conf']['trackperpage'],0);
+                Cache::writeCache(serialize($list), $fname);
+            }
+            if ($list) {
                 $reslt = $list['response'];
                 $list = null;
 				$i=0;
@@ -61,6 +68,7 @@ $app->post('/getleft/', function (Request $request) use ($app) {
                 LastSearch::SetLastSearch($uid,$req);
                 $category = 'search';
                 $serial = State::Getserial($side, $category, $req);
+
                 return $app['twig']->render('left.twig', array(
                     'header' => $header,
                     'page' => $page,
@@ -75,10 +83,19 @@ $app->post('/getleft/', function (Request $request) use ($app) {
         } else { $app['session']->set('req', ''); }
         break;
     default:
+
+
         $header = "ТОП 100";
         $page = 1;
         $totalpages = 5;
-        if ($list = Plist::GetPlaylist(1, 0)){
+        $fname = md5("top");
+        if($cache=unserialize(Cache::readCache($fname, 36000))){
+            $list = $cache;
+        } else {
+            $list = Plist::GetPlaylist(1, 0);
+            Cache::writeCache(serialize($list), $fname);
+        }
+        if ($list){
             $reslt = $list;
             $list = null;
             $i=0;
@@ -108,6 +125,8 @@ $app->post('/getleft/', function (Request $request) use ($app) {
                 'trackselect' => $serial,
                 'category' => $category
             ));
+
+
         } else {
             die ("Не могу загрузить ни один плейлист");
         }

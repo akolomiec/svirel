@@ -142,6 +142,8 @@ class Plist
 //todo сформировать ответ как у контакта, с aid ownerid и т.д.
     public static function GetPlaylist($playlistid, $offset = 0){
         $trackperpage = $GLOBALS['conf']['trackperpage'];
+
+
         $db = new DB;
         $sql = "SELECT * FROM `playlist` WHERE `playlist_id` = '{$playlistid}' ORDER BY `serial` LIMIT {$offset}, {$trackperpage};";
         $res = $db->dbquery($sql);
@@ -152,6 +154,7 @@ class Plist
                 $track = explode("_", $value['track_id']);
                 $list[] = array('aid'=>$track[1],'owner_id'=>$track[0], 'serial' => $value['serial'], 'artist' => $value['track_artist'], 'title'=> $value['track_title'], 'duration' => Core::sec2time($value['track_duration']));
             }
+
             return $list;
         } else {
             return false;

@@ -5,9 +5,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 $app->get('/media/{trackid}', function ($trackid) use ($app) {
     $trackid = substr($trackid, 0, -4);
-    $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
-    $data = json_decode($resp, true);
-    $data = $data['response'];
+    $filename = md5($trackid);
+
+    if($cache=unserialize(Cache::readCache($filename, 604800))){
+        $data = $cache;
+    } else {
+        $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
+        $data = json_decode($resp, true);
+        $data = $data['response'];
+        Cache::writeCache(serialize($data), $filename);
+    }
+
     if (strlen($data[0]['artist'] . "-" . $data[0]['title'] . ".mp3") >= 255 ) {
         $data[0]['artist'] = substr($data[0]['artist'], 0 ,128);
         $data[0]['title'] = substr($data[0]['title'], 0 ,120);
@@ -27,9 +35,18 @@ $app->get('/getprevtrack/', function () use ($app) {
     if ($serial > 0) {
         $filename = State::GetSongbySerial($serial);
         $trackid = substr($filename, 0, -4);
-        $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
-        $data = json_decode($resp, true);
-        $data = $data['response'];
+
+        $fname = md5($trackid);
+
+        if($cache=unserialize(Cache::readCache($fname, 604800))){
+            $data = $cache;
+        } else {
+            $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
+            $data = json_decode($resp, true);
+            $data = $data['response'];
+            Cache::writeCache(serialize($data), $fname);
+        }
+
         State::save($state['user_id'], $state['side'], $state['playlistid'], $state['search'], $serial, $state['currentpage'], $state['repeat'], $state['shuffle'], $state['sort']);
         return json_encode(array('filename' => $filename, 'artist' => $data[0]['artist'], 'trak' => $data[0]['title']));
     } else {
@@ -52,9 +69,16 @@ $app->get('/getnexttrack/', function () use ($app) {
         $filename = State::GetSongbySerial($serial);
         if (!empty($filename)) {
             $trackid = substr($filename, 0, -4);
-            $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
-            $data = json_decode($resp, true);
-            $data = $data['response'];
+            $fname = md5($trackid);
+
+            if($cache=unserialize(Cache::readCache($fname, 604800))){
+                $data = $cache;
+            } else {
+                $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
+                $data = json_decode($resp, true);
+                $data = $data['response'];
+                Cache::writeCache(serialize($data), $fname);
+            }
             State::save($state['user_id'], $state['side'], $state['playlistid'], $state['search'], $serial, $state['currentpage'], $state['repeat'], $state['shuffle'], $state['sort']);
             //todo проверка на пустой ответ
             return json_encode(array('filename' => $filename, 'artist' => $data[0]['artist'], 'trak' => $data[0]['title']));
@@ -75,9 +99,16 @@ $app->get('/getrandomtrack/', function () use ($app) {
     $filename = State::GetSongbySerial($serial);
     if (!empty($filename)) {
         $trackid = substr($filename, 0, -4);
-        $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
-        $data = json_decode($resp, true);
-        $data = $data['response'];
+        $fname = md5($trackid);
+
+        if($cache=unserialize(Cache::readCache($fname, 604800))){
+            $data = $cache;
+        } else {
+            $resp = file_get_contents('https://api.vk.com/method/audio.getById?audios=' . $app->escape($trackid) . '&access_token=' . Core::taketoken());
+            $data = json_decode($resp, true);
+            $data = $data['response'];
+            Cache::writeCache(serialize($data), $fname);
+        }
         State::save($state['user_id'], $state['side'], $state['playlistid'], $state['search'], $serial, $state['currentpage'], $state['repeat'], $state['shuffle'], $state['sort']);
         //todo проверка на пустой ответ
         return json_encode(array('filename' => $filename, 'artist' => $data[0]['artist'], 'trak' => $data[0]['title']));

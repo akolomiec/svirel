@@ -43,6 +43,7 @@ $app->post('/addinplaylist/', function ( Request $request ) use ($app){
     $side = 'right';
     $trackid = $request->get('trackid');
     $playlistid = $request->get('playlistid');
+
     //$app['monolog']->addInfo('Добавляем песню в плейлист', array('trackid' => $trackid, 'playlistid' => $playlistid));
     if (Plist::Addtrack($playlistid, $trackid)) {
         $list = Plist::GetPlaylist($playlistid);
